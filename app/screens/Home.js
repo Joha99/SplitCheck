@@ -1,13 +1,12 @@
 import { View, StyleSheet, Text } from "react-native";
 import React from "react";
+import Screen from "../components/Screen";
 
 export default function Home({}) {
   return (
-    <SafeAreaView>
-      <View style={styles.container}>
-        <Text>Home!</Text>
-      </View>
-    </SafeAreaView>
+    <Screen>
+      <Text>SPLITVIEW!</Text>
+    </Screen>
   );
 }
 

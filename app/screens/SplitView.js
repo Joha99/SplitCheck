@@ -1,13 +1,12 @@
-import { View, StyleSheet, Text, SafeAreaView } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import React from "react";
+import Screen from "../components/Screen";
 
 export default function SplitView({}) {
   return (
-    <SafeAreaView>
-      <View style={styles.container}>
-        <Text>SPLITVIEW!</Text>
-      </View>
-    </SafeAreaView>
+    <Screen>
+      <Text>SPLITVIEW!</Text>
+    </Screen>
   );
 }
 
