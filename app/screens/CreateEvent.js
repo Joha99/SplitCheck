@@ -1,14 +1,10 @@
-import {
-  View,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Button,
-} from "react-native";
+import { View, StyleSheet, Text, TextInput, Button } from "react-native";
 import React, { useState } from "react";
 import Screen from "../components/Screen";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import defaultStyles from "../config/styles";
+import AppText from "../components/AppText";
+import AppTextInput from "../components/AppTextInput";
 
 export default function CreateEvent({}) {
   const [showDate, setShowDate] = useState(false);
@@ -24,31 +20,32 @@ export default function CreateEvent({}) {
 
   return (
     <Screen>
-      <Text>CREATEEVENT</Text>
+      <View style={[defaultStyles.centerItems, styles.titleContainer]}>
+        <AppText style={defaultStyles.title}>Create Event</AppText>
+      </View>
       <View style={styles.inputContainer}>
         <View style={styles.input}>
-          <Text>Event Name</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={() => {}}
-            placeholder="Birthday Dinner"
-          />
-        </View>
-        <Button onPress={showDatePicker} title="Pick Date" />
-        <View style={styles.input}>
-          <Text>Selected Date: {date.toString()}</Text>
-          {showDate && (
-            <DateTimePicker mode="date" value={date} onChange={onDateChange} />
-          )}
+          <AppText>Event Name</AppText>
+          <AppTextInput placeholder="Birthday Dinner" />
         </View>
 
         <View style={styles.input}>
-          <Text>Total Cost</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={() => {}}
-            placeholder="$200"
-          />
+          <AppText>Total Cost</AppText>
+          <AppTextInput placeholder="$200" />
+        </View>
+
+        <View>
+          <Button onPress={showDatePicker} title="Pick Date" />
+          <View style={styles.input}>
+            <AppText>{date.toString()}</AppText>
+            {showDate && (
+              <DateTimePicker
+                mode="date"
+                value={date}
+                onChange={onDateChange}
+              />
+            )}
+          </View>
         </View>
       </View>
     </Screen>
@@ -57,4 +54,12 @@ export default function CreateEvent({}) {
 
 const styles = StyleSheet.create({
   container: {},
+  titleContainer: {
+    padding: 20,
+    borderBottomColor: defaultStyles.colors.light,
+    borderBottomWidth: 1,
+  },
+  inputContainer: {
+    padding: 20,
+  },
 });
