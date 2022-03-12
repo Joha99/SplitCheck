@@ -2,6 +2,7 @@ import { StyleSheet, View } from "react-native";
 import SplitView from "./app/screens/SplitView";
 import Home from "./app/screens/Home";
 import Login from "./app/screens/Login"
+import CreateEvent from "./app/screens/CreateEvent";
 
 export default function App() {
   return (
@@ -9,6 +10,7 @@ export default function App() {
       {/* <Home /> */}
       {/* <SplitView /> */}
       <Login />
+      <CreateEvent />
     </View>
   );
 }

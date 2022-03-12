@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
 import React from "react";
 import Screen from "../components/Screen";
+import Button from "../components/Button";
 
 export default function SplitView({}) {
   const lenders = [
@@ -34,12 +35,10 @@ export default function SplitView({}) {
       <View style={styles.lenderContainer}>
         {lenders.map((lender) => {
           return (
-            <TouchableWithoutFeedback onPress={() => {}} key={lender.name}>
-              <View style={styles.lender}>
-                <Text style={styles.name}>{lender.name}</Text>
-                <Text style={styles.loan}>${lender.loan.toString()}</Text>
-              </View>
-            </TouchableWithoutFeedback>
+            <Button key={lender.name}>
+              <Text style={styles.name}>{lender.name}</Text>
+              <Text style={styles.loan}>${lender.loan.toString()}</Text>
+            </Button>
           );
         })}
       </View>
@@ -55,14 +54,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-  },
-  lenderContainer: {},
-  lender: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    backgroundColor: "red",
-    padding: 20,
-    marginBottom: 15,
   },
   name: {
     fontSize: 16,
