@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import Constants from 'expo-constants';
-import {getAuth, createUserWithEmailAndPassword} from "firebase/auth";
+import 'firebase/auth';
 // Optionally import the services that you want to use
 
 //import {...} from "firebase/database";

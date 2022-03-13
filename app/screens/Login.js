@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Alert, Button, TextInput, View, StyleSheet } from 'react-native';
 import { Header } from 'react-native/Libraries/NewAppScreen';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 
 export default class App extends Component {
   constructor(props) {
