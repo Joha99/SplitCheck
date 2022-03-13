@@ -1,21 +1,24 @@
-import { View, StyleSheet, Text, TextInput, Button } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+} from "react-native";
 import React, { useState } from "react";
 import Screen from "../components/Screen";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import defaultStyles from "../config/styles";
 import AppText from "../components/AppText";
 import AppTextInput from "../components/AppTextInput";
+import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
+import Button from "../components/Button";
 
 export default function CreateEvent({}) {
-  const [showDate, setShowDate] = useState(false);
   const [date, setDate] = useState(new Date());
 
   const onDateChange = (event, selectedDate) => {
     setDate(selectedDate);
-  };
-
-  const showDatePicker = () => {
-    setShowDate(true);
   };
 
   return (
@@ -34,18 +37,27 @@ export default function CreateEvent({}) {
           <AppTextInput placeholder="$200" />
         </View>
 
-        <View>
-          <Button onPress={showDatePicker} title="Pick Date" />
-          <View style={styles.input}>
-            <AppText>{date.toString()}</AppText>
-            {showDate && (
-              <DateTimePicker
-                mode="date"
-                value={date}
-                onChange={onDateChange}
-              />
-            )}
-          </View>
+        <View style={styles.input}>
+          <TouchableWithoutFeedback
+            style={{
+              backgroundColor: defaultStyles.colors.light,
+              width: "40%",
+            }}
+          >
+            <View style={styles.dateContainer}>
+              <AppText>Pick Date</AppText>
+              <View>
+                {
+                  <DateTimePicker
+                    mode="date"
+                    value={date}
+                    onChange={onDateChange}
+                    style={{ width: 100 }}
+                  />
+                }
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
         </View>
       </View>
     </Screen>
@@ -61,5 +73,12 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     padding: 20,
+  },
+  dateContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  input: {
+    marginBottom: 15,
   },
 });

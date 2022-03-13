@@ -2,6 +2,9 @@ import { StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
 import React from "react";
 import Screen from "../components/Screen";
 import Button from "../components/Button";
+import defaultStyles from "../config/styles";
+import AppText from "../components/AppText";
+import AppTextInput from "../components/AppTextInput";
 
 export default function SplitView({}) {
   const lenders = [
@@ -29,15 +32,22 @@ export default function SplitView({}) {
 
   return (
     <Screen>
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>AppleBees Dinner</Text>
+      <View style={[defaultStyles.centerItems, styles.titleContainer]}>
+        <AppText style={defaultStyles.title}>AppleBees Dinner</AppText>
       </View>
       <View style={styles.lenderContainer}>
         {lenders.map((lender) => {
           return (
-            <Button key={lender.name}>
-              <Text style={styles.name}>{lender.name}</Text>
-              <Text style={styles.loan}>${lender.loan.toString()}</Text>
+            <Button
+              key={lender.name}
+              style={{
+                backgroundColor: defaultStyles.colors.light,
+                borderColor: defaultStyles.colors.medium,
+                borderWidth: 1,
+              }}
+            >
+              <AppText>{lender.name}</AppText>
+              <AppText>${lender.loan.toString()}</AppText>
             </Button>
           );
         })}
@@ -48,12 +58,12 @@ export default function SplitView({}) {
 
 const styles = StyleSheet.create({
   titleContainer: {
-    height: "25%",
-    alignItems: "center",
-    justifyContent: "center",
+    padding: 20,
+    borderBottomColor: defaultStyles.colors.light,
+    borderBottomWidth: 1,
   },
-  title: {
-    fontSize: 20,
+  lenderContainer: {
+    padding: 20,
   },
   name: {
     fontSize: 16,

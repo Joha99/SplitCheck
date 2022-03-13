@@ -1,9 +1,9 @@
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 
-export default function Button({ children, style }) {
+export default function Button({ children, style, ...rest }) {
   return (
-    <TouchableOpacity style={[styles.container]}>
+    <TouchableOpacity style={[styles.container, style]} {...rest}>
       <View style={styles.view}>{children}</View>
     </TouchableOpacity>
   );
@@ -12,8 +12,7 @@ export default function Button({ children, style }) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    backgroundColor: "#e63946",
-    padding: 25,
+    padding: 15,
     marginBottom: 15,
     borderRadius: 5,
   },
