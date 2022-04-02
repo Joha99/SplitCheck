@@ -6,6 +6,7 @@ import Screen from "../components/Screen";
 export default function Home({}) {
   return (
     <Screen>
+      <View style={styles.inputContainer}>
       <Text>Split Check!</Text>
       <Pressable style={styles.button}>
         <Text style={styles.text}>New Event</Text>
@@ -16,7 +17,7 @@ export default function Home({}) {
       <Pressable style={styles.button}>
         <Text style={styles.text}>History</Text>
       </Pressable>
-
+      </View>
     </Screen>
   );
 }

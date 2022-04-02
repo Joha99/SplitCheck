@@ -1,13 +1,19 @@
 import { View, StyleSheet, Text, Pressable } from "react-native";
 import React from "react";
 import Screen from "../components/Screen";
+import Button from "../components/Button";
+import AppText from "../components/AppText";
 
 export default function PaymentDivideOption({}) {
   return (
     <Screen>
+    <View style={styles.inputContainer}>
       <Text>Payment</Text>
       <Text>How do you want to split up the event?</Text>
-      <Pressable style={styles.button}>
+      <Button>
+          <AppText>Split Equally</AppText>
+      </Button>
+      {/* <Pressable style={styles.button}>
         <Text style={styles.text}>Split Equally</Text>
       </Pressable>
       <Pressable style={styles.button}>
@@ -15,7 +21,8 @@ export default function PaymentDivideOption({}) {
       </Pressable>
       <Pressable style={styles.button}>
         <Text style={styles.text}>Back</Text>
-      </Pressable>
+      </Pressable> */}
+      </View>
     </Screen>
     
   );
