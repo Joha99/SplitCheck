@@ -26,7 +26,7 @@ export default function SettlePayment() {
         </View>
 
         {/* Submit */}
-        <Button>
+        <Button style={{ backgroundColor: defaultStyles.colors.secondary }}>
           <AppText>I Paid</AppText>
         </Button>
       </View>
