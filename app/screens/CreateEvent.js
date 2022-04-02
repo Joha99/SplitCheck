@@ -1,18 +1,10 @@
-import {
-  View,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { View, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import React, { useState } from "react";
 import Screen from "../components/Screen";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import defaultStyles from "../config/styles";
 import AppText from "../components/AppText";
 import AppTextInput from "../components/AppTextInput";
-import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
-import Button from "../components/Button";
 
 export default function CreateEvent({}) {
   const [date, setDate] = useState(new Date());

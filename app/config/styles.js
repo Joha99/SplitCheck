@@ -13,7 +13,7 @@ export default {
   title: {
     fontFamily: Platform.OS === "android" ? "Roboto" : "Avenir",
     color: colors.dark,
-    fontSize: 20,
+    fontSize: 25,
   },
 
   centerItems: {

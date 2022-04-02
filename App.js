@@ -3,14 +3,12 @@ import SplitView from "./app/screens/SplitView";
 import Home from "./app/screens/Home";
 import Login from "./app/screens/Login";
 import CreateEvent from "./app/screens/CreateEvent";
+import EqualPayment from "./app/screens/EqualPayment";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      {/* <Home /> */}
-      <SplitView />
-      {/* <Login /> */}
-      {/* <CreateEvent /> */}
+      <EqualPayment />
     </View>
   );
 }
