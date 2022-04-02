@@ -8,9 +8,9 @@ export default function App() {
   return (
     <View style={styles.container}>
       {/* <Home /> */}
-      {/* <SplitView /> */}
+      <SplitView />
       {/* <Login /> */}
-      <CreateEvent />
+      {/* <CreateEvent /> */}
     </View>
   );
 }
