@@ -13,7 +13,13 @@ export default {
   title: {
     fontFamily: Platform.OS === "android" ? "Roboto" : "Avenir",
     color: colors.dark,
+    fontSize: 25,
+  },
+
+  header: {
     fontSize: 20,
+    fontFamily: Platform.OS === "android" ? "Roboto" : "Avenir",
+    color: colors.dark,
   },
 
   centerItems: {
