@@ -16,6 +16,12 @@ export default {
     fontSize: 25,
   },
 
+  header: {
+    fontSize: 20,
+    fontFamily: Platform.OS === "android" ? "Roboto" : "Avenir",
+    color: colors.dark,
+  },
+
   centerItems: {
     alignItems: "center",
     justifyContent: "center",

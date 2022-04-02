@@ -5,11 +5,12 @@ import Login from "./app/screens/Login";
 import CreateEvent from "./app/screens/CreateEvent";
 import EqualPayment from "./app/screens/EqualPayment";
 import CodeJoin from "./app/screens/CodeJoin";
+import SettlePayment from "./app/screens/SettlePayment";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <CodeJoin />
+      <SettlePayment />
     </View>
   );
 }

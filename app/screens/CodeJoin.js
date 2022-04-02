@@ -12,7 +12,6 @@ export default function CodeJoin() {
         <Text style={[defaultStyles.title]}>Join a Session</Text>
       </View>
       <View style={styles.inputContainer}>
-        {/* Payment deadline */}
         <View style={styles.input}>
           <AppText>Session code</AppText>
           <AppTextInput placeholder="123456" />
