@@ -1,23 +1,29 @@
-import { View, StyleSheet, Text, Button, Pressable } from "react-native";
+import { View, StyleSheet, Text, Pressable } from "react-native";
 import React from "react";
 import Screen from "../components/Screen";
-
+import Button from "../components/Button";
+import AppText from "../components/AppText";
+import defaultStyles from "../config/styles";
 
 export default function Home({}) {
   return (
     <Screen>
       <View style={styles.inputContainer}>
-      <Text>Split Check!</Text>
-      <Pressable style={styles.button}>
-        <Text style={styles.text}>New Event</Text>
-      </Pressable>
-      <Pressable style={styles.button}>
-        <Text style={styles.text}>Settle Up</Text>
-      </Pressable>
-      <Pressable style={styles.button}>
-        <Text style={styles.text}>History</Text>
-      </Pressable>
+      <View style={[defaultStyles.centerItems, styles.titleContainer]}>
+        <Text style={[defaultStyles.title, styles.mainTitle]}>Split Check!</Text>
       </View>
+
+      <Button style={{ backgroundColor: defaultStyles.colors.secondary }}>
+          <AppText>New Event</AppText>
+      </Button>
+      <Button style={{ backgroundColor: defaultStyles.colors.secondary }}>
+          <AppText>Settle Up</AppText>
+      </Button>
+      <Button style={{ backgroundColor: defaultStyles.colors.secondary }}>
+          <AppText>History</AppText>
+      </Button>
+      </View>
+
     </Screen>
   );
 }
@@ -45,4 +51,8 @@ const styles = StyleSheet.create({
     letterSpacing: 0.25,
     color: 'white',
   },
+  mainTitle: {
+    marginTop: 50,
+    marginBottom: 200,
+  }
 });

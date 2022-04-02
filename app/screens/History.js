@@ -53,9 +53,9 @@ export default function History({}) {
         })}
       </View>
       <View style={styles.eventsContainer}>
-          <Button
-            title = "Back">
-          </Button>
+      <Button style={{ backgroundColor: defaultStyles.colors.secondary }}>
+          <AppText>Back</AppText>
+      </Button>
       </View>
     </Screen>
   );

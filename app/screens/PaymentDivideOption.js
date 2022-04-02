@@ -3,25 +3,26 @@ import React from "react";
 import Screen from "../components/Screen";
 import Button from "../components/Button";
 import AppText from "../components/AppText";
+import defaultStyles from "../config/styles";
 
 export default function PaymentDivideOption({}) {
   return (
     <Screen>
     <View style={styles.inputContainer}>
-      <Text>Payment</Text>
-      <Text>How do you want to split up the event?</Text>
-      <Button>
+    <View style={[defaultStyles.centerItems, styles.titleContainer]}>
+        <Text style={[defaultStyles.title]}>Settle Payment</Text>
+      </View>
+      <Text style={styles.question}>How do you want to split up the event?</Text>
+      <Button style={{ backgroundColor: defaultStyles.colors.secondary }}>
           <AppText>Split Equally</AppText>
       </Button>
-      {/* <Pressable style={styles.button}>
-        <Text style={styles.text}>Split Equally</Text>
-      </Pressable>
-      <Pressable style={styles.button}>
-        <Text style={styles.text}>Specific Amounts</Text>
-      </Pressable>
-      <Pressable style={styles.button}>
-        <Text style={styles.text}>Back</Text>
-      </Pressable> */}
+
+      <Button style={{ backgroundColor: defaultStyles.colors.secondary }}>
+          <AppText>Specifics Amounts</AppText>
+      </Button>
+      <Button style={{ backgroundColor: defaultStyles.colors.secondary }}>
+          <AppText>Back</AppText>
+      </Button>
       </View>
     </Screen>
     
@@ -29,6 +30,11 @@ export default function PaymentDivideOption({}) {
 }
 
 const styles = StyleSheet.create({
+    titleContainer: {
+        padding: 20,
+        borderBottomColor: defaultStyles.colors.light,
+        borderBottomWidth: 1,
+      },
     container: {
         flex: 1,
         backgroundColor: '#71EC4C',
@@ -50,5 +56,8 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
       letterSpacing: 0.25,
       color: 'white',
+    },
+    question: {
+        marginBottom: 50
     },
   });

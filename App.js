@@ -16,9 +16,9 @@ export default function App() {
       {/* <SplitView /> */}
       {/* <Login /> */}
       {/* <CreateEvent /> */}
-      {/* <History /> */}
-      <PaymentDivideOption />
-      <SettlePayment />
+      <History />
+      {/* <PaymentDivideOption /> */}
+      {/* <SettlePayment /> */}
     </View>
   );
 }
