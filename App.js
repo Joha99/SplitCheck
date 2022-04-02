@@ -4,11 +4,12 @@ import Home from "./app/screens/Home";
 import Login from "./app/screens/Login";
 import CreateEvent from "./app/screens/CreateEvent";
 import EqualPayment from "./app/screens/EqualPayment";
+import CodeJoin from "./app/screens/CodeJoin";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <EqualPayment />
+      <CodeJoin />
     </View>
   );
 }
