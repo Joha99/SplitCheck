@@ -14,11 +14,11 @@ export default function Home({navigation}) {
       </View>
 
       <Button style={{ backgroundColor: defaultStyles.colors.secondary }}
-              onPress={() => navigation.navigate("CreateEvent")}>
+              onPress={() => navigation.navigate("CreateEventNavigator")}>
           <AppText>New Event</AppText>
       </Button>
       <Button style={{ backgroundColor: defaultStyles.colors.secondary }}
-              onPress={() => navigation.navigate("SettleUp")}>
+              onPress={() => navigation.navigate("SettleNavigator")}>
           <AppText>Settle Up</AppText>
       </Button>
       <Button style={{ backgroundColor: defaultStyles.colors.secondary }}
