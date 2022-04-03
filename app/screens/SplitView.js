@@ -6,7 +6,7 @@ import defaultStyles from "../config/styles";
 import AppText from "../components/AppText";
 import AppTextInput from "../components/AppTextInput";
 
-export default function SplitView({navigation}) {
+export default function SplitView({ navigation }) {
   const lenders = [
     {
       name: "ME",
@@ -53,10 +53,12 @@ export default function SplitView({navigation}) {
           );
         })}
       </View>
-      <Button style={{ backgroundColor: defaultStyles.colors.secondary }}
-                onPress={() => navigation.navigate("Home")}>
-          <AppText>Home</AppText>
-        </Button>
+      <Button
+        style={{ backgroundColor: defaultStyles.colors.secondary }}
+        onPress={() => navigation.navigate("Home")}
+      >
+        <AppText>Home</AppText>
+      </Button>
     </Screen>
   );
 }
