@@ -6,7 +6,7 @@ import AppText from "../components/AppText";
 import AppTextInput from "../components/AppTextInput";
 import Button from "../components/Button";
 
-export default function SettlePayment() {
+export default function SettlePayment({ navigation }) {
   return (
     <Screen>
       <View style={[defaultStyles.centerItems, styles.titleContainer]}>

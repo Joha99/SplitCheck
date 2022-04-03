@@ -1,25 +1,21 @@
 import { StyleSheet, View } from "react-native";
-import SplitView from "./app/screens/SplitView";
-import Home from "./app/screens/Home";
-import Login from "./app/screens/Login";
-import CreateEvent from "./app/screens/CreateEvent";
-import History from "./app/screens/History";
-import PaymentDivideOption from "./app/screens/PaymentDivideOption";
-import EqualPayment from "./app/screens/EqualPayment";
-import CodeJoin from "./app/screens/CodeJoin";
-import SettlePayment from "./app/screens/SettlePayment";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import CreateEventNavigator from "./app/navigation/CreateEventNavigator";
+import navigationTheme from "./app/navigation/navigationTheme";
+
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      {/* <Home /> */}
-      {/* <SplitView /> */}
-      {/* <Login /> */}
-      {/* <CreateEvent /> */}
-      <History />
-      {/* <PaymentDivideOption /> */}
-      {/* <SettlePayment /> */}
-    </View>
+    <NavigationContainer theme={navigationTheme}>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen
+          name="CreateScreenNavigator"
+          component={CreateEventNavigator}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
