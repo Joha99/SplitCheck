@@ -7,7 +7,7 @@ import EqualPayment from "../screens/EqualPayment";
 const Stack = createStackNavigator();
 
 const CreateEventNavigator = () => (
-  <Stack.Navigator>
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="CreateEvent" component={CreateEvent} />
     <Stack.Screen name="PaymentDivideOption" component={PaymentDivideOption} />
     <Stack.Screen name="EqualPayment" component={EqualPayment} />

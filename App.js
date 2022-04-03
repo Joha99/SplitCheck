@@ -2,15 +2,13 @@ import { StyleSheet, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import CreateEventNavigator from "./app/navigation/CreateEventNavigator";
+import navigationTheme from "./app/navigation/navigationTheme";
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    // <View style={styles.container}>
-    //   <CreateEventNavigator />
-    // </View>
-    <NavigationContainer>
+    <NavigationContainer theme={navigationTheme}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen
           name="CreateScreenNavigator"

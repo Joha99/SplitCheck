@@ -26,4 +26,8 @@ export default {
     alignItems: "center",
     justifyContent: "center",
   },
+
+  verticalPadding: {
+    paddingVertical: 20,
+  },
 };

@@ -5,8 +5,9 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import defaultStyles from "../config/styles";
 import AppText from "../components/AppText";
 import AppTextInput from "../components/AppTextInput";
+import Button from "../components/Button";
 
-export default function CreateEvent({}) {
+export default function CreateEvent({ navigation }) {
   const [date, setDate] = useState(new Date());
 
   const onDateChange = (event, selectedDate) => {
@@ -30,7 +31,9 @@ export default function CreateEvent({}) {
         </View>
 
         <View style={styles.input}>
-          <TouchableWithoutFeedback
+          <AppText>Date</AppText>
+          <AppTextInput placeholder="02/14/22" />
+          {/* <TouchableWithoutFeedback
             style={{
               backgroundColor: defaultStyles.colors.light,
               width: "40%",
@@ -49,8 +52,18 @@ export default function CreateEvent({}) {
                 }
               </View>
             </View>
-          </TouchableWithoutFeedback>
+          </TouchableWithoutFeedback> */}
         </View>
+
+        <Button
+          style={[
+            { backgroundColor: defaultStyles.colors.secondary },
+            styles.input,
+          ]}
+          onPress={() => navigation.navigate("PaymentDivideOption")}
+        >
+          <AppText>Next</AppText>
+        </Button>
       </View>
     </Screen>
   );
