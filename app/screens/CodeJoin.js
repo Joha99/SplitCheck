@@ -4,8 +4,9 @@ import Screen from "../components/Screen";
 import defaultStyles from "../config/styles";
 import AppText from "../components/AppText";
 import AppTextInput from "../components/AppTextInput";
+import Button from "../components/Button";
 
-export default function CodeJoin() {
+export default function CodeJoin({navigation}) {
   return (
     <Screen>
       <View style={[defaultStyles.centerItems, styles.titleContainer]}>
@@ -17,6 +18,10 @@ export default function CodeJoin() {
           <AppTextInput placeholder="123456" />
         </View>
       </View>
+      <Button style={{ backgroundColor: defaultStyles.colors.secondary }}
+              onPress={() => navigation.navigate("SplitView")}>
+          <AppText>Next</AppText>
+      </Button>
     </Screen>
   );
 }

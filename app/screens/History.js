@@ -6,7 +6,7 @@ import defaultStyles from "../config/styles";
 import AppText from "../components/AppText";
 import AppTextInput from "../components/AppTextInput";
 
-export default function History({}) {
+export default function History({navigation}) {
   const events = [
     {
       name: "AppleBees Night",
@@ -53,7 +53,8 @@ export default function History({}) {
         })}
       </View>
       <View style={styles.eventsContainer}>
-      <Button style={{ backgroundColor: defaultStyles.colors.secondary }}>
+      <Button style={{ backgroundColor: defaultStyles.colors.secondary }}
+                onPress={() => navigation.navigate("Home")}>
           <AppText>Back</AppText>
       </Button>
       </View>

@@ -5,7 +5,7 @@ import Button from "../components/Button";
 import AppText from "../components/AppText";
 import defaultStyles from "../config/styles";
 
-export default function Home({}) {
+export default function Home({navigation}) {
   return (
     <Screen>
       <View style={styles.inputContainer}>
@@ -13,13 +13,16 @@ export default function Home({}) {
         <Text style={[defaultStyles.title, styles.mainTitle]}>Split Check!</Text>
       </View>
 
-      <Button style={{ backgroundColor: defaultStyles.colors.secondary }}>
+      <Button style={{ backgroundColor: defaultStyles.colors.secondary }}
+              onPress={() => navigation.navigate("CreateEventNavigator")}>
           <AppText>New Event</AppText>
       </Button>
-      <Button style={{ backgroundColor: defaultStyles.colors.secondary }}>
+      <Button style={{ backgroundColor: defaultStyles.colors.secondary }}
+              onPress={() => navigation.navigate("SettleNavigator")}>
           <AppText>Settle Up</AppText>
       </Button>
-      <Button style={{ backgroundColor: defaultStyles.colors.secondary }}>
+      <Button style={{ backgroundColor: defaultStyles.colors.secondary }}
+              onPress={() => navigation.navigate("History")}>
           <AppText>History</AppText>
       </Button>
       </View>

@@ -26,7 +26,8 @@ export default function SettlePayment({ navigation }) {
         </View>
 
         {/* Submit */}
-        <Button style={{ backgroundColor: defaultStyles.colors.secondary }}>
+        <Button style={{ backgroundColor: defaultStyles.colors.secondary }}
+                onPress={() => navigation.navigate("SplitView")}>
           <AppText>I Paid</AppText>
         </Button>
       </View>

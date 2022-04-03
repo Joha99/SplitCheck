@@ -3,6 +3,9 @@ import { createStackNavigator } from "@react-navigation/stack";
 import CreateEvent from "../screens/CreateEvent";
 import PaymentDivideOption from "../screens/PaymentDivideOption";
 import EqualPayment from "../screens/EqualPayment";
+import Home from "../screens/Home";
+import SettlePayment from "../screens/SettlePayment";
+import History from "../screens/History";
 
 const Stack = createStackNavigator();
 
