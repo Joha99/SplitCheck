@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "375700902920",
+    "project_id": "splitcheck-8040d",
+    "storage_bucket": "splitcheck-8040d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:375700902920:android:5c8cb90a60f91c0256edbd",
+        "android_client_info": {
+          "package_name": "com.masochists.splitcheck"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "375700902920-j5f52u09c957tceokpctsgnl512fl4gg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.masochists.splitcheck",
+            "certificate_hash": "1f67b244da433e8bb0fec41cce77b94efeeb9a37"
+          }
+        },
+        {
+          "client_id": "375700902920-k1ap5p4d3umb141i0r151o36ngnfkqj4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDy_Zp2jVx8ier5gmh5BKr_NNa-b-pR0n8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "375700902920-k1ap5p4d3umb141i0r151o36ngnfkqj4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "375700902920-g7fmsiqqb2pbvfo8mfs4mm3v8nqio5dq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.masochists.splitcheck"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
