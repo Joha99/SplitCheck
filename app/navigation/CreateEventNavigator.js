@@ -5,6 +5,8 @@ import PaymentDivideOption from "../screens/PaymentDivideOption";
 import EqualPayment from "../screens/EqualPayment";
 import Login from "../screens/Login";
 import Home from "../screens/Home";
+import SettlePayment from "../screens/SettlePayment";
+import History from "../screens/History";
 
 const Stack = createStackNavigator();
 

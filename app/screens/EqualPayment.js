@@ -4,8 +4,9 @@ import Screen from "../components/Screen";
 import defaultStyles from "../config/styles";
 import AppText from "../components/AppText";
 import AppTextInput from "../components/AppTextInput";
+import Button from "../components/Button";
 
-export default function EqualPayment() {
+export default function EqualPayment({ navigation }) {
   return (
     <Screen>
       <View style={[defaultStyles.centerItems, styles.titleContainer]}>
@@ -25,6 +26,15 @@ export default function EqualPayment() {
           <AppText>Payment deadline</AppText>
           <AppTextInput placeholder="02/25/22" />
         </View>
+
+        <Button
+          onPress={() =>
+            navigation.navigate("SettleNavigator", { screen: "SplitView" })
+          }
+          style={{ backgroundColor: defaultStyles.colors.secondary }}
+        >
+          <AppText>Next</AppText>
+        </Button>
       </View>
     </Screen>
   );
