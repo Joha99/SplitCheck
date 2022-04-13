@@ -19,9 +19,18 @@ export default {
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.masochists.splitcheck",
+      "supportsTablet": true,
+      "config": {
+        "googleSignIn": {
+          // Your REVERSED_CLIENT_ID from the GoogleService-Info.plist
+          "reservedClientId": "com.googleusercontent.apps.375700902920-g7fmsiqqb2pbvfo8mfs4mm3v8nqio5dq"
+        }
+      }
     },
     "android": {
+      "package": "com.masochists.splitcheck",
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"

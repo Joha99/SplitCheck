@@ -3,10 +3,12 @@ import React from "react";
 import colors from "../config/colors";
 import defaultStyles from "../config/styles";
 
-export default function AppTextInput({ width = "100%", ...rest }) {
+export default function AppTextInput({ width = "100%", givenRef=null, ...rest }) {
   return (
     <View style={[styles.container, { width: width }]}>
       <TextInput
+        ref={givenRef}
+        // onPress = {current.focus()}
         placeholderTextColor={defaultStyles.colors.medium}
         style={styles.textInput}
         {...rest}
