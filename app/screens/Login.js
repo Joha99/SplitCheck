@@ -1,9 +1,9 @@
 import React, { Component, useEffect, useState, useRef } from 'react';
-import { Alert, TextInput, View, StyleSheet, ActivityIndicator, Toast } from 'react-native';
+import { Alert, View, StyleSheet, ActivityIndicator } from 'react-native';
 import { Header } from 'react-native/Libraries/NewAppScreen';
 import { auth, app } from "../../firebase";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, RecaptchaVerifier, PhoneAuthProvider, sendPasswordResetEmail, signInWithCredential } from 'firebase/auth';
-import { FirebaseRecaptchaVerifierModal, FirebaseRecaptchaBanner } from 'expo-firebase-recaptcha';
+import { FirebaseRecaptchaVerifierModal} from 'expo-firebase-recaptcha';
 import { useAuthState } from "react-firebase-hooks/auth";
 import Screen from "../components/Screen";
 import defaultStyles from "../config/styles";
