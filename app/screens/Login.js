@@ -19,17 +19,57 @@ export default function Login({ navigation }) {
   // const [password, setPassword] = useState("");
   const [user, loading, error] = useAuthState(auth);
 
-  const recaptchaVerifier = React.useRef(null);
+  const recaptchaVerifier = useRef(null);
 
   const FIREBASE_CONFIG = app ? app.options : undefined;
-  const [phoneNumber, setPhoneNumber] = React.useState('');
-  const [verificationId, setVerificationId] = React.useState('');
-  const [verifyError, setVerifyError] = React.useState();
-  const [verifyInProgress, setVerifyInProgress] = React.useState(false);
-  const [verificationCode, setVerificationCode] = React.useState('');
-  const [confirmError, setConfirmError] = React.useState();
-  const [confirmInProgress, setConfirmInProgress] = React.useState(false);
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [verificationId, setVerificationId] = useState('');
+  const [verifyError, setVerifyError] = useState();
+  const [verifyInProgress, setVerifyInProgress] = useState(false);
+  const [verificationCode, setVerificationCode] = useState('');
+  const [confirmError, setConfirmError] = useState();
+  const [confirmInProgress, setConfirmInProgress] = useState(false);
+  const codeInput = useRef();
+
   const isConfigValid = !!FIREBASE_CONFIG.apiKey;
+
+  const sendVerificationCode = (async () => {
+    const phoneProvider = new PhoneAuthProvider(auth);
+    try {
+      setVerifyError(undefined);
+      setVerifyInProgress(true);
+      setVerificationId('');
+      const verificationId = await phoneProvider.verifyPhoneNumber(
+        phoneNumber,
+        // @ts-ignore
+        recaptchaVerifier.current
+      );
+      setVerifyInProgress(false);
+      setVerificationId(verificationId);
+  
+    } catch (err) {
+      setVerifyError(err);
+      setVerifyInProgress(false);
+    }
+  })
+
+  const verifyCode = (async () => {
+    try {
+      setConfirmError(undefined);
+      setConfirmInProgress(true);
+      const credential = PhoneAuthProvider.credential(
+        verificationId,
+        verificationCode
+      );
+      const authResult = await signInWithCredential(auth, credential);
+      setConfirmInProgress(false);
+      setVerificationId('');
+      setVerificationCode('');
+    } catch (err) {
+      setConfirmError(err);
+      setConfirmInProgress(false);
+    }
+  })
 
   useEffect(() => {
     if (loading) {
@@ -53,7 +93,7 @@ export default function Login({ navigation }) {
   return (
     <Screen>
       <View style={[defaultStyles.centerItems, styles.titleContainer]}>
-        <AppText style={defaultStyles.title}>Log In</AppText>
+        <AppText style={defaultStyles.title}>Log In/Sign Up</AppText>
       </View>
       <FirebaseRecaptchaVerifierModal
         ref={recaptchaVerifier}
@@ -75,8 +115,13 @@ export default function Login({ navigation }) {
             placeholder="+1 404-123-6789"
             blurOnSubmit = {true} 
             value={phoneNumber}
+            autoFocus={true}
             // autoFocus={isConfigValid}
-            onChange={setPhoneNumber}/>
+            onChange={setPhoneNumber}
+            onSubmitEditing={async () => {
+              sendVerificationCode()
+              codeInput.current.focus()
+              }}/>
         </View>
         <Button
           style={[
@@ -85,23 +130,7 @@ export default function Login({ navigation }) {
           ]}
           disabled={!phoneNumber}
           onPress={async () => {
-            const phoneProvider = new PhoneAuthProvider(auth);
-            try {
-              setVerifyError(undefined);
-              setVerifyInProgress(true);
-              setVerificationId('');
-              const verificationId = await phoneProvider.verifyPhoneNumber(
-                phoneNumber,
-                // @ts-ignore
-                recaptchaVerifier.current
-              );
-              setVerifyInProgress(false);
-              setVerificationId(verificationId);
-
-            } catch (err) {
-              setVerifyError(err);
-              setVerifyInProgress(false);
-            }
+            sendVerificationCode()
           }}
         >
           <AppText>{verificationId ? 'Resend' : 'Send'} Verification Code</AppText>
@@ -112,10 +141,11 @@ export default function Login({ navigation }) {
         <View style={styles.input}>
           <AppText>Enter Verification Code:</AppText>
           <AppTextInput 
+                      givenRef={codeInput}
                       placeholder="123456" 
                       secureTextEntry={true} 
-                      editable={!!verificationId}
-                      onChangeText={text => setVerificationCode(text)}
+                      editable={!!phoneNumber}
+                      onChangeText={setVerificationCode}
                       blurOnSubmit={true}/>
         </View>
         <Button
@@ -125,21 +155,7 @@ export default function Login({ navigation }) {
             ]}
             disabled={!verificationCode}
             onPress={async () => {
-              try {
-                setConfirmError(undefined);
-                setConfirmInProgress(true);
-                const credential = PhoneAuthProvider.credential(
-                  verificationId,
-                  verificationCode
-                );
-                const authResult = await signInWithCredential(auth, credential);
-                setConfirmInProgress(false);
-                setVerificationId('');
-                setVerificationCode('');
-              } catch (err) {
-                setConfirmError(err);
-                setConfirmInProgress(false);
-              }
+              verifyCode()
             }}
           >
             <AppText>Confirm Verification Code</AppText>
