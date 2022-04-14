@@ -99,7 +99,7 @@ export default function Login({ navigation }) {
       console.log(user.phoneNumber)
       console.log(user.email)
       console.log(user.uid)
-      await updateUserProfile()
+      // await updateUserProfile()
       console.log(user)
     };
   }, [user, loading]);
