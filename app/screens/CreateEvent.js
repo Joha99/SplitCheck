@@ -11,6 +11,7 @@ import Button from "../components/Button";
 import Screen from "../components/Screen";
 import colors from "../config/colors";
 import defaultStyles from "../config/styles";
+import { LogBox } from 'react-native';
 
 
 
@@ -49,6 +50,7 @@ export default function CreateEvent({ navigation }) {
   }
   
   const handleCreateEvent = async(generatedCode) => {
+    LogBox.ignoreLogs(['Setting a timer for a long period of time, i.e.']);
     console.log(generatedCode)
     // console.log(joinCode)
     const docRef = await addDoc(collection(db, "events"), {

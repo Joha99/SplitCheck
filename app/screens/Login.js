@@ -143,7 +143,7 @@ export default function Login({ navigation }) {
           <AppTextInput 
                       givenRef={codeInput}
                       placeholder="123456" 
-                      secureTextEntry={true} 
+                      secureTextEntry={false} 
                       editable={!!phoneNumber}
                       onChangeText={setVerificationCode}
                       blurOnSubmit={true}/>
