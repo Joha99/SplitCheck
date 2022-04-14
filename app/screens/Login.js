@@ -2,7 +2,7 @@ import React, { Component, useEffect, useState, useRef } from 'react';
 import { Alert, View, StyleSheet, ActivityIndicator } from 'react-native';
 import { Header } from 'react-native/Libraries/NewAppScreen';
 import { auth, app } from "../../firebase";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, RecaptchaVerifier, PhoneAuthProvider, sendPasswordResetEmail, signInWithCredential } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, RecaptchaVerifier, PhoneAuthProvider, sendPasswordResetEmail, signInWithCredential, updateProfile } from 'firebase/auth';
 import { FirebaseRecaptchaVerifierModal} from 'expo-firebase-recaptcha';
 import { useAuthState } from "react-firebase-hooks/auth";
 import Screen from "../components/Screen";
@@ -32,6 +32,18 @@ export default function Login({ navigation }) {
   const codeInput = useRef();
 
   const isConfigValid = !!FIREBASE_CONFIG.apiKey;
+  
+  const updateUserProfile = (async() => {
+      updateProfile(user, {
+        displayName: 'Anshul21',
+        // photoURL: 'http://www.example.com/12345678/photo.png',
+      }).then(() => {
+        // See the UserRecord reference doc for the contents of userRecord.
+        console.log('Successfully updated user', user.toJSON());
+      }).catch((error) => {
+        console.log('Error updating user:', error);
+      });
+  })
 
   const sendVerificationCode = (async () => {
     const phoneProvider = new PhoneAuthProvider(auth);
@@ -71,7 +83,7 @@ export default function Login({ navigation }) {
     }
   })
 
-  useEffect(() => {
+  useEffect(async() => {
     if (loading) {
       // maybe trigger a loading screen
       return;
@@ -87,6 +99,8 @@ export default function Login({ navigation }) {
       console.log(user.phoneNumber)
       console.log(user.email)
       console.log(user.uid)
+      await updateUserProfile()
+      console.log(user)
     };
   }, [user, loading]);
   
