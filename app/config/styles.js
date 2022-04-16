@@ -30,4 +30,12 @@ export default {
   verticalPadding: {
     paddingVertical: 20,
   },
+
+  horizontalPadding: {
+    paddingHorizontal: 20,
+  },
+
+  padding: {
+    padding: 20,
+  },
 };

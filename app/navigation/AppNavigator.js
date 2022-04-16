@@ -8,14 +8,19 @@ import Login from "../screens/Login";
 import History from "../screens/History";
 import SettleNavigator from "./SettleNavigator";
 import CreateEventNavigator from "./CreateEventNavigator";
+import Account from "../screens/Account";
 
 const Stack = createStackNavigator();
 
 const AppNavigator = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="Account" component={Account} />
     <Stack.Screen name="Login" component={Login} />
     <Stack.Screen name="Home" component={Home} />
-    <Stack.Screen name="CreateEventNavigator" component={CreateEventNavigator} />
+    <Stack.Screen
+      name="CreateEventNavigator"
+      component={CreateEventNavigator}
+    />
     <Stack.Screen name="SettleNavigator" component={SettleNavigator} />
     <Stack.Screen name="History" component={History} />
   </Stack.Navigator>
