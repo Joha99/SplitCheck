@@ -98,6 +98,7 @@ export default function Login({ navigation }) {
     // }
     if (user) {
       console.log(user.displayName + " is already logged in!");
+      console.log(user.displayName, user.email, user.phoneNumber);
       Alert.alert(
         `Welcome back, ${user.displayName}!`,
         "You are already logged in.",

@@ -133,37 +133,6 @@ export default function Account({ navigation }) {
         console.log("skip displayName")
     }
     
-    if (user.email !== email && email != "") {
-      setDidAnything(true)
-
-      updateEmail(user, email).then(() => {
-        // See the UserRecord reference doc for the contents of userRecord.
-        console.log("Successfully updated email", user.email);
-      })
-      .catch(async (error) => {
-        if (error.code === 'auth/requires-recent-login') {
-          const phoneProvider = new PhoneAuthProvider(auth);
-          setVerificationId("");
-
-          const verificationId = await phoneProvider.verifyPhoneNumber(
-            user.phoneNumber,
-            // @ts-ignore
-            recaptchaVerifier.current
-          )
-          setVerificationId(verificationId);
-          rePromptLogin()
-          
-          // // Now wait for verification code from user
-            
-        } else {
-          console.log("Error updating user:", error);
-          setMissionSuccess(false)
-        }
-      });
-    } else {
-      console.log("skip email")
-    }
-
     if (venmo !== initVenmo && venmo != "") {
       setDidAnything(true)
 
@@ -182,12 +151,27 @@ export default function Account({ navigation }) {
       console.log("skip venmo")
     }
     
-    console.log("mission success? ", missionSuccess)
-    console.log("did anything? ", didAnything)
-    if(missionSuccess && didAnything) {
-      confirmationAlert()
-    } else if (missionSuccess) {
-      navigation.navigate("Home")
+    if (user.email !== email && email != "") {
+      setDidAnything(true)
+
+      updateEmail(user, email).then(() => {
+        // See the UserRecord reference doc for the contents of userRecord.
+        console.log("Successfully updated email", user.email);
+        rePromptLogin(false)
+      })
+      .catch(async (error) => {
+        if (error.code === 'auth/requires-recent-login') {
+          await rePromptLogin(true)
+          // // Now wait for verification code from user
+            
+        } else {
+          console.log("Error updating user:", error);
+          rePromptLogin(false)
+          setMissionSuccess(false)
+        }
+      });
+    } else {
+      console.log("skip email")
     }
   };
 
@@ -201,26 +185,53 @@ export default function Account({ navigation }) {
         updateEmail(user, email).then(() => {
           // See the UserRecord reference doc for the contents of userRecord.
           console.log("Successfully re-authed and updated email address", user.email);
-          return new Promise((resolve, reject) => {resolve()})
+          setDialogVisible(false);
+          setVerificationId("");
+          setVerificationCode("");
+
+          console.log("mission success? ", missionSuccess)
+          console.log("did anything? ", didAnything)
+          if (missionSuccess && didAnything) {
+            confirmationAlert()
+          } else if (missionSuccess) {
+            navigation.navigate("Home")
+          }
+
         })
         .catch((error) => {
           console.log("Error updating email address:", error);
           setMissionSuccess(false)
           return new Promise((resolve, reject) => {reject()})
         })
+        
       })
     
   }
 
-  const rePromptLogin = async () => {
-    setDialogVisible(true);
+  const rePromptLogin = async (doThis) => {
+    if (doThis)
+    {
+      const phoneProvider = new PhoneAuthProvider(auth);
+      setVerificationId("");
 
-    reAuthenticateUserAndUpdateEmail()
+      const verificationId = await phoneProvider.verifyPhoneNumber(
+        user.phoneNumber,
+        // @ts-ignore
+        recaptchaVerifier.current
+      )
+      setVerificationId(verificationId);
+      setDialogVisible(true);
+    } else {
+      console.log("mission success? ", missionSuccess)
+      console.log("did anything? ", didAnything)
+      console.log(user.toJSON())
 
-    setDialogVisible(false);
-    setVerificationId("");
-    setVerificationCode("");
-    callback()
+      if (missionSuccess && didAnything) {
+        confirmationAlert()
+      } else if (missionSuccess) {
+        navigation.navigate("Home")
+      }
+    }
   }
 
   const codeInputted = async() => new Promise((resolve) => resolve())
@@ -239,8 +250,19 @@ export default function Account({ navigation }) {
         firebaseConfig={FIREBASE_CONFIG}
         attemptInvisibleVerification={true}
       />
-
-        
+      <Dialog.Container visible={dialogVisible}>
+        <Dialog.Title>Account Verification</Dialog.Title>
+        <Dialog.Description>
+          To complete this action, please enter the code we sent to your phone number.
+        </Dialog.Description>
+        <Dialog.Input placeholder="12312" onSubmitEditing={(code) => {
+            setVerificationCode(code)
+          }}>
+          
+        </Dialog.Input>
+        <Dialog.Button label="OK" onPress={reAuthenticateUserAndUpdateEmail} />
+      </Dialog.Container>
+      
 
       <Pressable 
         onPress = {() => focusOn(nameInput)} >
