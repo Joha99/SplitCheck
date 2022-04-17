@@ -97,9 +97,10 @@ export default function CreateEvent({ navigation }) {
         <AppText style={defaultStyles.title}>Create New Split</AppText>
       </View>
 
-      <View style={styles.inputContainer}>
+      <View style={[defaultStyles.padding]}>
         <Pressable 
-        onPress = {() => focusOn(nameInput)} >
+        onPress = {() => focusOn(nameInput)} 
+        >
           <View style={styles.input} pointerEvents="none">
             <AppText>Event Name</AppText>
             <AppTextInput placeholder="Birthday Dinner" 
@@ -142,7 +143,7 @@ export default function CreateEvent({ navigation }) {
         </View>
         </Pressable>
             
-        <View style={styles.input}>
+        <View>
           <Checkbox.Item
             label="Split this payment evenly?"
             status={isEvenSplit ? 'checked' : 'unchecked'}
@@ -190,8 +191,7 @@ export default function CreateEvent({ navigation }) {
             onPress={async() => {
               generatedCode = (Math.random().toString(36).slice(2, 8)).toUpperCase()
               handleCreateEvent(generatedCode)
-            }
-          }
+            }}
           >
             <AppText>Invite Friends!</AppText>
           </Button>

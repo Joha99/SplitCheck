@@ -14,8 +14,8 @@ const Stack = createStackNavigator();
 
 const AppNavigator = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
-    <Stack.Screen name="Account" component={Account} />
     <Stack.Screen name="Login" component={Login} />
+    <Stack.Screen name="Account" component={Account} />
     <Stack.Screen name="Home" component={Home} />
     <Stack.Screen
       name="CreateEventNavigator"
