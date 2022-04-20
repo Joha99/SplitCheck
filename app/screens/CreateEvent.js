@@ -67,24 +67,24 @@ export default function CreateEvent({ navigation }) {
     console.log(`added ${docRef.id} to Firestore.`)
 
     // These are some code examples on how to access data from the firestore
-    const queryByInviteCode = query(collection(db, "events"), where("inviteCode", "==", generatedCode));
-    onSnapshot(queryByInviteCode, (querySnapshot) => {
+    const queryEventsByInviteCode = query(collection(db, "events"), where("inviteCode", "==", generatedCode));
+    onSnapshot(queryEventsByInviteCode, (querySnapshot) => {
       const events = [];
       querySnapshot.forEach((doc) => {
           events.push(doc.data());
 
       });
-      console.log(`Code lookup complete: ${generatedCode} `, events);
+      console.log(`Invite Code lookup complete: ${generatedCode} `, events);
     });
 
-    const queryByUID = query(collection(db, "events"), where("creator", "==", user.uid));
-    onSnapshot(queryByUID, (querySnapshot) => {
+    const queryEventsByUserID = query(collection(db, "events"), where("creator", "==", user.uid));
+    onSnapshot(queryEventsByUserID, (querySnapshot) => {
       const events = [];
       querySnapshot.forEach((doc) => {
           events.push(doc.data());
 
       });
-      console.log(`User lookup complete: ${user.uid} `, events);
+      console.log(`User Events lookup complete: ${user.uid} `, events);
     });
 
     navigation.navigate("SettleNavigator", {screen: "SplitView"});
