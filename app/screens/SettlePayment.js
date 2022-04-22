@@ -24,7 +24,7 @@ export default function SettlePayment({ route, navigation }) {
         {/* Amount owed */}
         <View style={styles.input}>
           <AppText>Amount owed</AppText>
-          <AppTextInput placeholder={amountOwed.toString()} />
+          <AppTextInput placeholder={amountOwed} />
         </View>
 
         {/* Submit */}
