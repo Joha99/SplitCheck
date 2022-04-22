@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, Pressable } from "react-native";
+import { View, StyleSheet, Text, Pressable, Image } from "react-native";
 import React from "react";
 import Screen from "../components/Screen";
 import Button from "../components/Button";
@@ -9,22 +9,34 @@ export default function Home({navigation}) {
   return (
     <Screen>
       <View style={styles.inputContainer}>
-      <View style={[defaultStyles.centerItems, styles.titleContainer]}>
-        <Text style={[defaultStyles.title, styles.mainTitle]}>Split Check!</Text>
-      </View>
+        <View style={{alignItems: 'right'}}>
+          <Button style={styles.account}
+                  onPress={() => navigation.navigate("Account")}>
+              <AppText>Account</AppText>
+          </Button>
+        </View>
 
-      <Button style={{ backgroundColor: defaultStyles.colors.secondary }}
-              onPress={() => navigation.navigate("CreateEventNavigator")}>
-          <AppText>New Event</AppText>
-      </Button>
-      <Button style={{ backgroundColor: defaultStyles.colors.secondary }}
-              onPress={() => navigation.navigate("SettleNavigator")}>
-          <AppText>Settle Up</AppText>
-      </Button>
-      <Button style={{ backgroundColor: defaultStyles.colors.secondary }}
-              onPress={() => navigation.navigate("History")}>
-          <AppText>History</AppText>
-      </Button>
+        <View style={[defaultStyles.centerItems, styles.titleContainer]}>
+          <Text style={[defaultStyles.title, styles.mainTitle]}>Split Check!</Text>
+        </View>
+        <View style={defaultStyles.centerItems}>
+        <Image
+          style={styles.logo}
+          source={require('../../assets/splitcheck-logo.png')}/>
+        </View>
+
+        <Button style={{ backgroundColor: defaultStyles.colors.secondary }}
+                onPress={() => navigation.navigate("CreateEventNavigator")}>
+            <AppText>New Event</AppText>
+        </Button>
+        <Button style={{ backgroundColor: defaultStyles.colors.secondary }}
+                onPress={() => navigation.navigate("SettleNavigator")}>
+            <AppText>Settle Up</AppText>
+        </Button>
+        <Button style={{ backgroundColor: defaultStyles.colors.secondary }}
+                onPress={() => navigation.navigate("History")}>
+            <AppText>History</AppText>
+        </Button>
       </View>
 
     </Screen>
@@ -37,6 +49,11 @@ const styles = StyleSheet.create({
       backgroundColor: '#71EC4C',
       alignItems: 'center',
       justifyContent: 'center',
+  },
+  account: {
+    width: '30%',
+    height: 50,
+    alignSelf: 'flex-end'
   },
   button: {
     alignItems: 'center',
@@ -57,5 +74,10 @@ const styles = StyleSheet.create({
   mainTitle: {
     marginTop: 50,
     marginBottom: 200,
+  },
+  logo: {
+    width: '30%',
+    height: '30%',
+    resizeMode: 'contain'
   }
 });

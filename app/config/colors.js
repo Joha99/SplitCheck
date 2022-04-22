@@ -4,6 +4,7 @@ export default {
   secondary: "#4ecdc4",
   black: "#000",
   white: "#fff",
+  red: '#FF0000',
 
   // GRAYS
   medium: "#6e6969",
