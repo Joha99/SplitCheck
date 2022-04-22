@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Screen from "../components/Screen";
 import Button from "../components/Button";
 import defaultStyles from "../config/styles";
 import AppText from "../components/AppText";
 import { db } from "../../firebase";
+import { doc, getDoc } from "firebase/firestore";
 import {
   addDoc,
   collection,
@@ -14,7 +15,22 @@ import {
 } from "firebase/firestore";
 
 export default function SplitView({ route, navigation }) {
-  const { eventName } = route.params;
+  const { eventName, eventCode } = route.params;
+  const [friends, setFriends] = useState([]);
+
+  useEffect(() => {
+    const queryEventsByInviteCode = query(
+      collection(db, "events"),
+      where("inviteCode", "==", eventCode)
+    );
+    onSnapshot(queryEventsByInviteCode, (querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        // console.log(doc.id, " => ", doc.data());
+        setFriends(doc.data().friends);
+      });
+      console.log(friends);
+    });
+  }, []);
 
   const lenders = [
     {
@@ -45,7 +61,7 @@ export default function SplitView({ route, navigation }) {
         <AppText style={defaultStyles.title}>{eventName}</AppText>
       </View>
       <View style={styles.lenderContainer}>
-        {lenders.map((lender) => {
+        {/* {lenders.map((lender) => {
           return (
             <Button
               key={lender.name}
@@ -58,6 +74,22 @@ export default function SplitView({ route, navigation }) {
             >
               <AppText>{lender.name}</AppText>
               <AppText>${lender.loan.toString()}</AppText>
+            </Button>
+          );
+        })} */}
+        {friends.map((friend) => {
+          return (
+            <Button
+              key={friend.user}
+              style={{
+                backgroundColor: defaultStyles.colors.light,
+                borderColor: defaultStyles.colors.medium,
+                borderWidth: 1,
+              }}
+              onPress={() => navigation.navigate("SettlePayment")}
+            >
+              <AppText>{friend.user}</AppText>
+              <AppText>${friend.amount.toString()}</AppText>
             </Button>
           );
         })}

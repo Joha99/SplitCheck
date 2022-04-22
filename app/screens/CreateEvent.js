@@ -101,7 +101,7 @@ export default function CreateEvent({ navigation }) {
 
     navigation.navigate("SettleNavigator", {
       screen: "SplitView",
-      params: { eventName: eventName },
+      params: { eventName: eventName, eventCode: generatedCode },
     });
   };
 
