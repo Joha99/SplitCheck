@@ -6,7 +6,9 @@ import AppText from "../components/AppText";
 import AppTextInput from "../components/AppTextInput";
 import Button from "../components/Button";
 
-export default function SettlePayment({ navigation }) {
+export default function SettlePayment({ route, navigation }) {
+  const { eventName, displayName, amountOwed } = route.params;
+
   return (
     <Screen>
       <View style={[defaultStyles.centerItems, styles.titleContainer]}>
@@ -16,13 +18,13 @@ export default function SettlePayment({ navigation }) {
         {/* Name of event */}
         <View style={styles.eventDescription}>
           <AppText style={defaultStyles.header}>Event</AppText>
-          <AppText>Dinner at AppleBee's</AppText>
+          <AppText>{eventName}</AppText>
         </View>
 
         {/* Amount owed */}
         <View style={styles.input}>
           <AppText>Amount owed</AppText>
-          <AppTextInput placeholder="$20.00" />
+          <AppTextInput placeholder={amountOwed.toString()} />
         </View>
 
         {/* Submit */}

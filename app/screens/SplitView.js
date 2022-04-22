@@ -5,18 +5,14 @@ import Button from "../components/Button";
 import defaultStyles from "../config/styles";
 import AppText from "../components/AppText";
 import { db } from "../../firebase";
-import { doc, getDoc } from "firebase/firestore";
-import {
-  addDoc,
-  collection,
-  onSnapshot,
-  query,
-  where,
-} from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { app, auth } from "../../firebase";
 
 export default function SplitView({ route, navigation }) {
   const { eventName, eventCode } = route.params;
   const [friends, setFriends] = useState([]);
+  const [user, loading, error] = useAuthState(auth);
 
   useEffect(() => {
     const queryEventsByInviteCode = query(
@@ -25,10 +21,8 @@ export default function SplitView({ route, navigation }) {
     );
     onSnapshot(queryEventsByInviteCode, (querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        // console.log(doc.id, " => ", doc.data());
         setFriends(doc.data().friends);
       });
-      console.log(friends);
     });
   }, []);
 
@@ -61,22 +55,6 @@ export default function SplitView({ route, navigation }) {
         <AppText style={defaultStyles.title}>{eventName}</AppText>
       </View>
       <View style={styles.lenderContainer}>
-        {/* {lenders.map((lender) => {
-          return (
-            <Button
-              key={lender.name}
-              style={{
-                backgroundColor: defaultStyles.colors.light,
-                borderColor: defaultStyles.colors.medium,
-                borderWidth: 1,
-              }}
-              onPress={() => navigation.navigate("SettlePayment")}
-            >
-              <AppText>{lender.name}</AppText>
-              <AppText>${lender.loan.toString()}</AppText>
-            </Button>
-          );
-        })} */}
         {friends.map((friend) => {
           return (
             <Button
@@ -86,20 +64,30 @@ export default function SplitView({ route, navigation }) {
                 borderColor: defaultStyles.colors.medium,
                 borderWidth: 1,
               }}
-              onPress={() => navigation.navigate("SettlePayment")}
+              onPress={() =>
+                navigation.navigate("SettlePayment", {
+                  eventName: eventName,
+                  displayName: friend.displayName,
+                  amountOwed: friend.amount.toString(),
+                })
+              }
             >
-              <AppText>{friend.user}</AppText>
-              <AppText>${friend.amount.toString()}</AppText>
+              <AppText style={{ textAlign: "center" }}>
+                {friend.displayName}
+              </AppText>
+              <AppText style={{ textAlign: "center" }}>
+                ${friend.amount.toString()}
+              </AppText>
             </Button>
           );
         })}
+        <Button
+          style={{ backgroundColor: defaultStyles.colors.secondary }}
+          onPress={() => navigation.navigate("Home")}
+        >
+          <AppText>Home</AppText>
+        </Button>
       </View>
-      <Button
-        style={{ backgroundColor: defaultStyles.colors.secondary }}
-        onPress={() => navigation.navigate("Home")}
-      >
-        <AppText>Home</AppText>
-      </Button>
     </Screen>
   );
 }

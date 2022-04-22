@@ -68,6 +68,7 @@ export default function CreateEvent({ navigation }) {
       friends: [
         {
           user: user.uid,
+          displayName: user.displayName,
           amount: splitAmount,
         },
       ],
