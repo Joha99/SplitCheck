@@ -9,7 +9,7 @@ export default function Home({navigation}) {
   return (
     <Screen>
       <View style={styles.inputContainer}>
-        <View style={{alignItems: 'right'}}>
+        <View style={{alignItems: 'center'}}>
           <Button style={styles.account}
                   onPress={() => navigation.navigate("Account")}>
               <AppText>Account</AppText>
