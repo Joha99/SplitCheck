@@ -52,25 +52,6 @@ export default function Login({ navigation }) {
     }
   };
 
-  const navigateLogin = async () => {
-    if(user.displayName === null) {
-      navigation.navigate("Account");
-    } else {
-      navigation.navigate("Home");
-    }
-  }
-
-  const logOutUser = async () => {
-    signOut(auth)
-      .then(() => {
-        console.log(user.displayName + " has logged out.\n");
-        navigation.navigate("Login");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
   const verifyCode = async () => {
     try {
       setConfirmError(undefined);
@@ -92,32 +73,27 @@ export default function Login({ navigation }) {
   };
 
   useEffect(async () => {
-    // if (loading) {
-    //   // maybe trigger a loading screen
-    //   return;
-    // }
     if (user) {
-      console.log(user.displayName + " is already logged in!");
-      console.log(user.displayName, user.email, user.phoneNumber);
-      Alert.alert(
-        `Welcome back, ${user.displayName}!`,
-        "You are already logged in.",
-        [
+      if(user.displayName === null) {
+        navigation.navigate("Account");
+      } else {
+        console.log(user.displayName + " is logged in!");
+        console.log(user.displayName, user.email, user.phoneNumber);
+        Alert.alert(
+          `Welcome back, ${user.displayName}!`,
+          "You are now logged in.",
+          [
+            {
+              text: "OK",
+              style: "default",
+            },
+          ],
           {
-            text: "Log Out!",
-            onPress: () => logOutUser(user),
-            style: "destructive",
-          },
-          {
-            text: "OK",
-            style: "default",
-          },
-        ],
-        {
-          cancelable: true,
-        }
-      );
-      navigateLogin()
+            cancelable: true,
+          }
+        );
+        navigation.navigate("Home");
+      }
     }
   }, [user, loading]);
 

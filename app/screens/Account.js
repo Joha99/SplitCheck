@@ -1,5 +1,5 @@
 import { View, StyleSheet, Alert } from "react-native";
-import React, {useState, useRef, useEffect} from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Screen from "../components/Screen";
 import Button from "../components/Button";
 import AppTextInput from "../components/AppTextInput";
@@ -9,17 +9,30 @@ import { auth, app, db } from "../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
 import colors from "../config/colors";
-import { reauthenticateWithCredential, updateEmail, updateProfile, PhoneAuthProvider, signOut } from "firebase/auth";
-import { setDoc, doc, getDoc, onSnapshot, query, where } from 'firebase/firestore';
+import {
+  reauthenticateWithCredential,
+  updateEmail,
+  updateProfile,
+  PhoneAuthProvider,
+  signOut,
+} from "firebase/auth";
+import {
+  setDoc,
+  doc,
+  getDoc,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
-import { LogBox } from 'react-native';
-import reactModal from '@prezly/react-promise-modal';
-import { Modal, Component } from 'react-bootstrap'; 
+import { LogBox } from "react-native";
+import reactModal from "@prezly/react-promise-modal";
+import { Modal, Component } from "react-bootstrap";
 import Dialog from "react-native-dialog";
 import { render } from "react-dom";
+import { async } from "@firebase/util";
 
 export default function Account({ navigation }) {
-  LogBox.ignoreLogs(['Setting a timer for a long period of time, i.e.']);
   const [user, loading, error] = useAuthState(auth);
 
   const [email, _setEmail] = useState("");
@@ -34,55 +47,50 @@ export default function Account({ navigation }) {
   const [nameInvalid, setNameInvalid] = useState(null);
   const [emailInvalid, setEmailInvalid] = useState(null);
 
-  const [dialogVisible, setDialogVisible] = useState(false);
-  const [verificationCode, setVerificationCode] = useState("");
-  const [verificationId, setVerificationId] = useState("");
-  
-  const [missionSuccess, setMissionSuccess] = useState(true);
-  const [didAnything, setDidAnything] = useState(false);
-
-  const FIREBASE_CONFIG = app ? app.options : undefined;
-
   const recaptchaVerifier = useRef(null);
 
   const setDisplayName = (text) => {
-    _setDisplayName(text)
-    setNameInvalid(text == '' || text == null)
-  }
+    _setDisplayName(text);
+    setNameInvalid(text == "" || text == null);
+  };
   const setEmail = (text) => {
-    _setEmail(text)
-    if(text == "") {
-      setEmailInvalid(false)
-    } else if(text.toLowerCase().match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    )) {
-      setEmailInvalid(false)
+    _setEmail(text);
+    if (text == "") {
+      setEmailInvalid(false);
+    } else if (
+      text
+        .toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        )
+    ) {
+      setEmailInvalid(false);
     } else {
-      setEmailInvalid(true)
+      setEmailInvalid(true);
     }
-    
-  }
+  };
 
   useEffect(async () => {
+    LogBox.ignoreLogs(["Setting a timer for a long period of time, i.e."]);
 
-    if(user) {
-      if(user.displayName) {
-        console.log(user.displayName)
-        setDisplayName(user.displayName)
+    if (user) {
+      if (user.displayName) {
+        console.log(user.displayName);
+        setDisplayName(user.displayName);
       }
       if (user.email) {
-        console.log(user.email)
-        setEmail(user.email)
+        console.log(user.email);
+        setEmail(user.email);
       }
 
       const venmoDoc = await getDoc(doc(db, "userinfo", user.uid));
       if (venmoDoc) {
-        console.log(venmoDoc.data().venmo)
-        setVenmo(venmoDoc.data().venmo)
-        setInitVenmo(venmoDoc.data().venmo)
+        console.log(venmoDoc.data().venmo);
+        setVenmo(venmoDoc.data().venmo);
+        setInitVenmo(venmoDoc.data().venmo);
       }
     }
-   }, [user]);
+  }, [user]);
 
   // verify emails too? or nah
   const confirmationAlert = async () => {
@@ -103,15 +111,32 @@ export default function Account({ navigation }) {
       ],
       {
         cancelable: true,
-        onDismiss: () => navigation.navigate("Home")
+        onDismiss: () => navigation.navigate("Home"),
+      }
+    );
+  };
+
+  const unAuthAlert = async() => {
+    Alert.alert(
+      `Uh oh!`,
+      "Looks like you are unauthenticated. Please log in again.",
+      [
+        {
+          text: "OK",
+          onPress: () => logOutUser(),
+          style: "default",
+        },
+      ],
+      {
+        cancelable: true,
+        onDismiss: () => logOutUser(),
       }
     );
   }
 
-
   const focusOn = (target) => {
-    target.current.focus()
-  }
+    target.current.focus();
+  };
 
   const logOutUser = async () => {
     signOut(auth)
@@ -121,14 +146,39 @@ export default function Account({ navigation }) {
       })
       .catch((error) => {
         console.log(error);
+        navigation.navigate("Login");
       });
   };
 
   const updateUserProfile = async () => {
-    if(user.displayName !== displayName && displayName != "") {
-      setDidAnything(true)
+    didAnything = false;
+    missionSuccess = true;
 
-      updateProfile(user, {
+    if (user.email !== email && email != "") {
+      didAnything = true;
+
+      await updateEmail(user, email)
+        .then(() => {
+          // See the UserRecord reference doc for the contents of userRecord.
+          console.log("Successfully updated email", user.email);
+        })
+        .catch(async (error) => {
+          if (error.code === "auth/requires-recent-login") {
+            console.log("We need a reprompt!");
+            missionSuccess = false;
+            await unAuthAlert();
+          } else {
+            console.log("Error updating user:", error);
+            missionSuccess = false;
+          }
+        });
+    } else {
+      console.log("skip email");
+    }
+
+    if (user.displayName !== displayName && displayName != "") {
+      didAnything = true;
+      await updateProfile(user, {
         displayName: displayName,
         // photoURL: 'http://www.example.com/12345678/photo.png',
       })
@@ -138,116 +188,44 @@ export default function Account({ navigation }) {
         })
         .catch((error) => {
           console.log("Error updating user:", error);
-          setMissionSuccess(false)
+          missionSuccess = false;
         });
     } else {
-        console.log("skip displayName")
+      console.log("skip displayName");
     }
-    
+
     if (venmo !== initVenmo && venmo != "") {
-      setDidAnything(true)
+      didAnything = true;
 
-      const docRef = await setDoc(doc(db, "userinfo", user.uid), {
-        venmo: venmo
-      }, { merge: true }).then(() => {
-        // See the UserRecord reference doc for the contents of userRecord.
-        console.log("Successfully updated user venmo ", venmo);
-        setInitVenmo(venmo)
-      })
-      .catch((error) => {
-        console.log("Error updating user:", error);
-        setMissionSuccess(false)
-      });
-    } else {
-      console.log("skip venmo")
-    }
-    
-    if (user.email !== email && email != "") {
-      setDidAnything(true)
-
-      updateEmail(user, email).then(() => {
-        // See the UserRecord reference doc for the contents of userRecord.
-        console.log("Successfully updated email", user.email);
-        rePromptLogin(false)
-      })
-      .catch(async (error) => {
-        if (error.code === 'auth/requires-recent-login') {
-          await rePromptLogin(true)
-          // // Now wait for verification code from user
-            
-        } else {
+      await setDoc(
+        doc(db, "userinfo", user.uid),
+        {
+          venmo: venmo,
+        },
+        { merge: true }
+      )
+        .then(() => {
+          // See the UserRecord reference doc for the contents of userRecord.
+          console.log("Successfully updated user venmo ", venmo);
+          setInitVenmo(venmo);
+        })
+        .catch((error) => {
           console.log("Error updating user:", error);
-          rePromptLogin(false)
-          setMissionSuccess(false)
-        }
-      });
+          missionSuccess = false;
+        });
     } else {
-      console.log("skip email")
+      console.log("skip venmo");
+    }
+
+    console.log("mission success? ", missionSuccess);
+    console.log("did anything? ", didAnything);
+    if (missionSuccess && didAnything) {
+      confirmationAlert();
+    } else if (missionSuccess) {
+      navigation.navigate("Home");
     }
   };
 
-  const reAuthenticateUserAndUpdateEmail = async () => {
-    const credential = PhoneAuthProvider.credential(
-      verificationId,
-      verificationCode
-    );
-
-    reauthenticateWithCredential(user, credential).then(() => {
-        updateEmail(user, email).then(() => {
-          // See the UserRecord reference doc for the contents of userRecord.
-          console.log("Successfully re-authed and updated email address", user.email);
-          setDialogVisible(false);
-          setVerificationId("");
-          setVerificationCode("");
-
-          console.log("mission success? ", missionSuccess)
-          console.log("did anything? ", didAnything)
-          if (missionSuccess && didAnything) {
-            confirmationAlert()
-          } else if (missionSuccess) {
-            navigation.navigate("Home")
-          }
-
-        })
-        .catch((error) => {
-          console.log("Error updating email address:", error);
-          setMissionSuccess(false)
-          return new Promise((resolve, reject) => {reject()})
-        })
-        
-      })
-    
-  }
-
-  const rePromptLogin = async (doThis) => {
-    if (doThis)
-    {
-      const phoneProvider = new PhoneAuthProvider(auth);
-      setVerificationId("");
-
-      const verificationId = await phoneProvider.verifyPhoneNumber(
-        user.phoneNumber,
-        // @ts-ignore
-        recaptchaVerifier.current
-      )
-      setVerificationId(verificationId);
-      setDialogVisible(true);
-    } else {
-      console.log("mission success? ", missionSuccess)
-      console.log("did anything? ", didAnything)
-      console.log(user.toJSON())
-
-      if (missionSuccess && didAnything) {
-        confirmationAlert()
-      } else if (missionSuccess) {
-        navigation.navigate("Home")
-      }
-    }
-  }
-
-  const codeInputted = async() => new Promise((resolve) => resolve())
-  
-  
   return (
     <Screen>
       <View style={[defaultStyles.centerItems, styles.titleContainer]}>
@@ -255,101 +233,89 @@ export default function Account({ navigation }) {
       </View>
 
       <View style={[defaultStyles.padding]}>
-
-      <FirebaseRecaptchaVerifierModal
-        ref={recaptchaVerifier}
-        firebaseConfig={FIREBASE_CONFIG}
-        attemptInvisibleVerification={true}
-      />
-      <Dialog.Container visible={dialogVisible}>
-        <Dialog.Title>Account Verification</Dialog.Title>
-        <Dialog.Description>
-          To complete this action, please enter the code we sent to your phone number.
-        </Dialog.Description>
-        <Dialog.Input placeholder="12312" onSubmitEditing={(code) => {
-            setVerificationCode(code)
-          }}>
-          
-        </Dialog.Input>
-        <Dialog.Button label="OK" onPress={reAuthenticateUserAndUpdateEmail} />
-      </Dialog.Container>
-      
-
-      <Pressable 
-        onPress = {() => focusOn(nameInput)} >
-          <View style={styles.input} pointerEvents="none">
+        <Pressable onPress={() => focusOn(nameInput)}>
+          <View style={styles.input}>
             <AppText>Name (required)</AppText>
-            <AppTextInput placeholder = {"Sarah"} 
-                givenRef={nameInput}
-                editable={true}
-                returnKeyType="next"
-                value={displayName.length > 0 ? displayName : ""}
-                onChangeText = {setDisplayName}
-                maxLength={150}
-                onSubmitEditing={() => 
-                  {
-                    setDisplayName(displayName)
-                    focusOn(emailInput)
-                  }}
-                />
-          {nameInvalid && <AppText style={styles.error}>{`Please enter a name!`}</AppText>}
+            <AppTextInput
+              placeholder={"Sarah"}
+              givenRef={nameInput}
+              editable={true}
+              returnKeyType="next"
+              value={displayName.length > 0 ? displayName : ""}
+              onChangeText={setDisplayName}
+              maxLength={150}
+              onSubmitEditing={() => {
+                setDisplayName(displayName);
+                focusOn(emailInput);
+              }}
+            />
+            {nameInvalid && (
+              <AppText style={styles.error}>{`Please enter a name!`}</AppText>
+            )}
           </View>
         </Pressable>
 
-        <Pressable 
-        onPress = {() => focusOn(emailInput)} >
-          <View style={styles.input} pointerEvents="none">
+        <Pressable onPress={() => focusOn(emailInput)}>
+          <View style={styles.input}>
             <AppText>Email address (optional)</AppText>
-            <AppTextInput placeholder = {"name@email.com"} 
-                givenRef={emailInput}
-                editable={true}
-                returnKeyType="next"
-                value={email.length > 0 ? email : ""}
-                onChangeText = {setEmail}
-                maxLength={250}
-                onSubmitEditing={() => 
-                  {
-                    setEmail(email)
-                    focusOn(venmoInput)
-                  }}
-                />
-          {emailInvalid && <AppText style={styles.error}>{`Please enter a valid email address!`}</AppText>}
+            <AppTextInput
+              placeholder={"name@email.com"}
+              givenRef={emailInput}
+              editable={true}
+              returnKeyType="next"
+              value={email.length > 0 ? email : ""}
+              onChangeText={setEmail}
+              maxLength={250}
+              onSubmitEditing={() => {
+                setEmail(email);
+                focusOn(venmoInput);
+              }}
+            />
+            {emailInvalid && (
+              <AppText
+                style={styles.error}
+              >{`Please enter a valid email address!`}</AppText>
+            )}
           </View>
         </Pressable>
 
-        <Pressable 
-        onPress = {() => focusOn(venmoInput)} >
-          <View style={styles.input} pointerEvents="none">
+        <Pressable onPress={() => focusOn(venmoInput)}>
+          <View style={styles.input}>
             <AppText>Venmo Handle (to help others pay you back)</AppText>
-            <AppTextInput placeholder = {"smith23"} 
-                givenRef={venmoInput}
-                editable={true}
-                returnKeyType="next"
-                value={venmo.length > 0 ? venmo : ""}
-                onChangeText = {setVenmo}
-                maxLength={250}
-                onSubmitEditing={() => 
-                  {
-                    setVenmo(venmo)
-                  }}
-                />
+            <AppTextInput
+              placeholder={"smith23"}
+              givenRef={venmoInput}
+              editable={true}
+              returnKeyType="next"
+              value={venmo.length > 0 ? venmo : ""}
+              onChangeText={setVenmo}
+              maxLength={250}
+              onSubmitEditing={() => {
+                setVenmo(venmo);
+              }}
+            />
           </View>
         </Pressable>
 
         <View style={styles.input}>
-          <Button style={{ backgroundColor: (nameInvalid || emailInvalid) ? colors.light : colors.secondary }}
-                  disabled={(nameInvalid || emailInvalid)}
-                  onPress={async() => {
-                    updateUserProfile()
-                    navigation.navigate("Home")
-                  }}
-            >
+          <Button
+            style={{
+              backgroundColor:
+                nameInvalid || emailInvalid ? colors.light : colors.secondary,
+            }}
+            disabled={nameInvalid || emailInvalid}
+            onPress={async () => {
+              updateUserProfile();
+            }}
+          >
             <AppText>Save changes</AppText>
           </Button>
-          <Button style={{ backgroundColor: defaultStyles.colors.red }}
-                onPress={() => logOutUser()}>
-            <AppText>Logout</AppText>
-        </Button>
+          <Button
+            style={{ backgroundColor: defaultStyles.colors.danger }}
+            onPress={() => logOutUser()}
+          >
+            <AppText>Log Out</AppText>
+          </Button>
         </View>
       </View>
     </Screen>
@@ -368,12 +334,12 @@ const styles = StyleSheet.create({
   error: {
     // marginTop: 10,
     marginBottom: 10,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: colors.danger,
   },
   success: {
     marginBottom: 10,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: colors.secondary,
   },
 });
