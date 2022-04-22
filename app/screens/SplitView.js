@@ -1,12 +1,21 @@
 import { StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import Screen from "../components/Screen";
 import Button from "../components/Button";
 import defaultStyles from "../config/styles";
 import AppText from "../components/AppText";
-import AppTextInput from "../components/AppTextInput";
+import { db } from "../../firebase";
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 
-export default function SplitView({ navigation }) {
+export default function SplitView({ route, navigation }) {
+  const { eventName } = route.params;
+
   const lenders = [
     {
       name: "ME",
@@ -33,7 +42,7 @@ export default function SplitView({ navigation }) {
   return (
     <Screen>
       <View style={[defaultStyles.centerItems, styles.titleContainer]}>
-        <AppText style={defaultStyles.title}>AppleBees Dinner</AppText>
+        <AppText style={defaultStyles.title}>{eventName}</AppText>
       </View>
       <View style={styles.lenderContainer}>
         {lenders.map((lender) => {
