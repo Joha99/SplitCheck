@@ -9,7 +9,7 @@ import { auth, app, db } from "../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
 import colors from "../config/colors";
-import { reauthenticateWithCredential, updateEmail, updateProfile, PhoneAuthProvider,  } from "firebase/auth";
+import { reauthenticateWithCredential, updateEmail, updateProfile, PhoneAuthProvider, signOut } from "firebase/auth";
 import { setDoc, doc, getDoc, onSnapshot, query, where } from 'firebase/firestore';
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 import { LogBox } from 'react-native';
@@ -112,6 +112,17 @@ export default function Account({ navigation }) {
   const focusOn = (target) => {
     target.current.focus()
   }
+
+  const logOutUser = async () => {
+    signOut(auth)
+      .then(() => {
+        console.log(user.displayName + " has logged out.\n");
+        navigation.navigate("Login");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const updateUserProfile = async () => {
     if(user.displayName !== displayName && displayName != "") {
@@ -330,11 +341,15 @@ export default function Account({ navigation }) {
                   disabled={(nameInvalid || emailInvalid)}
                   onPress={async() => {
                     updateUserProfile()
-                    // navigation.navigate("Home")
+                    navigation.navigate("Home")
                   }}
             >
             <AppText>Save changes</AppText>
           </Button>
+          <Button style={{ backgroundColor: defaultStyles.colors.red }}
+                onPress={() => logOutUser()}>
+            <AppText>Logout</AppText>
+        </Button>
         </View>
       </View>
     </Screen>
