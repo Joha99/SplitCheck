@@ -27,9 +27,7 @@ export default function Home({navigation}) {
   const FIREBASE_CONFIG = app ? app.options : undefined;
 
   const checkUserAuthenticated = () => {
-    let checkRevoked = true;
     const auth = getAuth();
-    
     onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log("Still logged in.")
@@ -144,7 +142,7 @@ export default function Home({navigation}) {
         </Button>
         <Button style={{ backgroundColor: defaultStyles.colors.secondary }}
                 onPress={() => navigation.navigate("SettleNavigator")}>
-            <AppText>Settle Up</AppText>
+            <AppText>Join Event</AppText>
         </Button>
         <Button style={{ backgroundColor: defaultStyles.colors.secondary }}
                 onPress={() => navigation.navigate("History")}>

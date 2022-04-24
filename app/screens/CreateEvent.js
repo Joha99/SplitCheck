@@ -4,6 +4,7 @@ import {
   onSnapshot,
   query,
   where,
+  Timestamp
 } from "firebase/firestore";
 import React, { useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -21,9 +22,10 @@ import { LogBox } from "react-native";
 
 export default function CreateEvent({ navigation }) {
   const [eventName, _setEventName] = useState("");
-  const [splitAmount, setSplitAmount] = useState(null);
+  const [totalAmount, setTotalAmount] = useState(null);
   const [numPeople, _setNumPeople] = useState(0);
   const [isEvenSplit, setEvenSplit] = useState(false);
+  const [dividedAmount, setDividedAmount] = useState(0);
 
   const costInput = useRef(null);
   const nameInput = useRef(null);
@@ -48,6 +50,9 @@ export default function CreateEvent({ navigation }) {
   const setNumPeople = (input) => {
     _setNumPeople(input);
     setNumPeopleInvalid(isNaN(input) || input <= 0);
+    let divided = (totalAmount / input)
+    let rounded = Math.round((divided + Number.EPSILON) * 100) / 100;
+    setDividedAmount(rounded)
   };
 
   const focusOn = (target) => {
@@ -57,21 +62,27 @@ export default function CreateEvent({ navigation }) {
   const handleCreateEvent = async (generatedCode) => {
     LogBox.ignoreLogs(["Setting a timer for a long period of time, i.e."]);
     console.log(generatedCode);
-    // console.log(joinCode)
+    let myAmount = totalAmount
+    if (isEvenSplit) {
+      myAmount = dividedAmount
+    }
     const docRef = await addDoc(collection(db, "events"), {
       creator: user.uid,
       inviteCode: generatedCode,
       name: eventName,
-      amount: splitAmount,
+      totalAmount: totalAmount,
+      splitAmount: dividedAmount,
       splitEvenly: isEvenSplit,
       numPeople: numPeople,
       friends: [
         {
-          user: user.uid,
+          userID: user.uid,
           displayName: user.displayName,
-          amount: splitAmount,
+          amount: myAmount,
+          isCreator: true          
         },
       ],
+      timestamp: Timestamp.now()
     });
     // console.log(`added ${docRef.id} to Firestore.`)
 
@@ -148,16 +159,16 @@ export default function CreateEvent({ navigation }) {
               keyboardType="numeric"
               blurOnSubmit={true}
               onChangeText={(text) => {
-                setSplitAmount(text);
+                setTotalAmount(text);
                 setInputInvalid(text);
               }}
               onSubmitEditing={() => {
-                setInputInvalid(splitAmount);
+                setInputInvalid(totalAmount);
               }}
             />
             {inputInvalid && (
               <AppText style={styles.error}>{`Please enter a ${
-                splitAmount < 0 ? "POSITIVE " : ""
+                totalAmount < 0 ? "POSITIVE " : ""
               }number!`}</AppText>
             )}
           </View>
@@ -203,7 +214,7 @@ export default function CreateEvent({ navigation }) {
               )}
               {!numPeopleInvalid && !inputInvalid && !nameInvalid && (
                 <AppText style={styles.success}>
-                  Each person will pay: {splitAmount / numPeople}
+                  Each person will pay: {dividedAmount}
                 </AppText>
               )}
             </View>

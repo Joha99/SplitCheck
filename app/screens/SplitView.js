@@ -5,49 +5,49 @@ import Button from "../components/Button";
 import defaultStyles from "../config/styles";
 import AppText from "../components/AppText";
 import { db } from "../../firebase";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { collection, onSnapshot, query, where, orderBy } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { app, auth } from "../../firebase";
 
 export default function SplitView({ route, navigation }) {
-  const { eventName, eventCode } = route.params;
+  const { eventCode, eventName } = route.params;
   const [friends, setFriends] = useState([]);
   const [user, loading, error] = useAuthState(auth);
 
   useEffect(() => {
-    const queryEventsByInviteCode = query(
+    const queryEventByInviteCode = query(
       collection(db, "events"),
-      where("inviteCode", "==", eventCode)
+      where("inviteCode", "==", eventCode),
+      orderBy("timestamp", "desc")
     );
-    onSnapshot(queryEventsByInviteCode, (querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        setFriends(doc.data().friends);
-      });
+    onSnapshot(queryEventByInviteCode, (results) => {
+      setFriends(results.docs[0].data().friends)
     });
+
   }, []);
 
-  const lenders = [
-    {
-      name: "ME",
-      loan: 20,
-    },
-    {
-      name: "Madison",
-      loan: 20,
-    },
-    {
-      name: "Sally",
-      loan: 20,
-    },
-    {
-      name: "Meghan",
-      loan: 20,
-    },
-    {
-      name: "Domininc",
-      loan: 20,
-    },
-  ];
+  // const lenders = [
+  //   {
+  //     name: "ME",
+  //     loan: 20,
+  //   },
+  //   {
+  //     name: "Madison",
+  //     loan: 20,
+  //   },
+  //   {
+  //     name: "Sally",
+  //     loan: 20,
+  //   },
+  //   {
+  //     name: "Meghan",
+  //     loan: 20,
+  //   },
+  //   {
+  //     name: "Domininc",
+  //     loan: 20,
+  //   },
+  // ];
 
   return (
     <Screen>
@@ -58,7 +58,7 @@ export default function SplitView({ route, navigation }) {
         {friends.map((friend) => {
           return (
             <Button
-              key={friend.user}
+              key={friend.userID}
               style={{
                 backgroundColor: defaultStyles.colors.light,
                 borderColor: defaultStyles.colors.medium,
