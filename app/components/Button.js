@@ -2,14 +2,20 @@ import { View, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import defaultStyles from "../config/styles";
 
-export default function Button({ children, style, onPress, ...rest }) {
+export default function Button({
+  children,
+  style,
+  onPress,
+  viewStyle,
+  ...rest
+}) {
   return (
     <TouchableOpacity
       style={[styles.container, style]}
       onPress={onPress}
       {...rest}
     >
-      <View>{children}</View>
+      <View style={viewStyle}>{children}</View>
     </TouchableOpacity>
   );
 }
