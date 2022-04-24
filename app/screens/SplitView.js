@@ -4,6 +4,7 @@ import Screen from "../components/Screen";
 import Button from "../components/Button";
 import defaultStyles from "../config/styles";
 import AppText from "../components/AppText";
+import AppTextInput from "../components/AppTextInput";
 import { db } from "../../firebase";
 import { collection, onSnapshot, query, where, orderBy } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -63,6 +64,11 @@ export default function SplitView({ route, navigation }) {
                 backgroundColor: defaultStyles.colors.light,
                 borderColor: defaultStyles.colors.medium,
                 borderWidth: 1,
+              }}
+              viewStyle={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                flex: 1,
               }}
               onPress={() =>
                 navigation.navigate("SettlePayment", {
