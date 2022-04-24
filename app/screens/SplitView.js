@@ -54,6 +54,7 @@ export default function SplitView({ route, navigation }) {
     <Screen>
       <View style={[defaultStyles.centerItems, styles.titleContainer]}>
         <AppText style={defaultStyles.title}>{eventName}</AppText>
+        <AppText>Event code: {eventCode}</AppText>
       </View>
       <View style={styles.lenderContainer}>
         {friends.map((friend) => {
