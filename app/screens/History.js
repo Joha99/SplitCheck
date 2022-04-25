@@ -58,6 +58,11 @@ export default function History({navigation}) {
                 borderColor: defaultStyles.colors.medium,
                 borderWidth: 1,
               }}
+              viewStyle={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                flex: 1,
+              }}
               onPress={() => {
                 navigation.navigate("SettleNavigator", 
                 {
@@ -69,7 +74,7 @@ export default function History({navigation}) {
                 }})
               }}
             >
-              <AppText>{event.name}</AppText>
+              <AppText style={styles.event}>{event.name}</AppText>
               <AppText>Date: {event.timestamp.toDate().toLocaleDateString("en-US")}</AppText>
             </Button>
           );
@@ -87,6 +92,10 @@ export default function History({navigation}) {
 }
 
 const styles = StyleSheet.create({
+  event: {
+    fontWeight: "bold",
+    color: defaultStyles.colors.secondary
+  },
   titleContainer: {
     padding: 20,
     borderBottomColor: defaultStyles.colors.light,
