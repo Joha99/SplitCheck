@@ -74,7 +74,7 @@ export default function History({navigation}) {
                 }})
               }}
             >
-              <AppText style={styles.event}>{event.name}</AppText>
+              <AppText style={event.creator === user.uid ? styles.myEvent : ""}>{event.name}</AppText>
               <AppText>{event.timestamp.toDate().toLocaleDateString("en-US")}</AppText>
             </Button>
           );
@@ -92,7 +92,7 @@ export default function History({navigation}) {
 }
 
 const styles = StyleSheet.create({
-  event: {
+  myEvent: {
     fontWeight: "bold",
     color: defaultStyles.colors.secondary
   },
