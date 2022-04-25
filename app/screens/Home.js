@@ -11,11 +11,11 @@ import {
   PhoneAuthProvider,
   getAuth,
   onAuthStateChanged,
-  signInWithCredential
+  signInWithCredential,
 } from "firebase/auth";
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 
-export default function Home({navigation}) {
+export default function Home({ navigation }) {
   const [dialogVisible, setDialogVisible] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
   const [verificationId, setVerificationId] = useState("");
@@ -30,31 +30,31 @@ export default function Home({navigation}) {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log("Still logged in.")
-        navigation.navigate("Account")
+        console.log("Still logged in.");
+        navigation.navigate("Account");
         // setDialogVisible(true)
         // sendVerificationCode()
       } else {
-        console.log("revoked token! Reprompt!")
-        setDialogVisible(true)
-        sendVerificationCode()
+        console.log("revoked token! Reprompt!");
+        setDialogVisible(true);
+        sendVerificationCode();
       }
     });
-      // auth.verifyIdToken(idToken, checkRevoked)
-      // .then((payload) => {
-      //   console.log("Still logged in.")
-      //   navigation.navigate("Account");
-      // })
-      // .catch((error) => {
-      //   if (error.code == 'auth/id-token-revoked') {
-      //     // Token has been revoked. Inform the user to reauthenticate or signOut() the user.
-      //     console.log("revoked token!")
-      //   } else {
-      //     console.log("invalid token!")
-      //     // Token is invalid.
-      //   }
-      // });
-  }
+    // auth.verifyIdToken(idToken, checkRevoked)
+    // .then((payload) => {
+    //   console.log("Still logged in.")
+    //   navigation.navigate("Account");
+    // })
+    // .catch((error) => {
+    //   if (error.code == 'auth/id-token-revoked') {
+    //     // Token has been revoked. Inform the user to reauthenticate or signOut() the user.
+    //     console.log("revoked token!")
+    //   } else {
+    //     console.log("invalid token!")
+    //     // Token is invalid.
+    //   }
+    // });
+  };
 
   const sendVerificationCode = async () => {
     const phoneProvider = new PhoneAuthProvider(auth);
@@ -82,71 +82,85 @@ export default function Home({navigation}) {
       const authResult = await signInWithCredential(auth, credential);
       setVerificationId("");
       setVerificationCode("");
-      console.log(user.displayName + " has just re-verified.")
-      navigation.navigate("Account")
+      console.log(user.displayName + " has just re-verified.");
+      navigation.navigate("Account");
     } catch (err) {
       setVerifyError(err);
     }
   };
-  
+
   return (
     <Screen>
       <View style={styles.inputContainer}>
-      <FirebaseRecaptchaVerifierModal
+        <FirebaseRecaptchaVerifierModal
           ref={recaptchaVerifier}
           firebaseConfig={FIREBASE_CONFIG}
           attemptInvisibleVerification={true}
         />
         <Dialog.Container visible={dialogVisible}>
           <Dialog.Title>Account Verification</Dialog.Title>
-            <Dialog.Description>
-              To complete this action, please enter the code we sent to your phone
-              number.
-            </Dialog.Description>
-            <Dialog.Input
-              placeholder="12312"
-              onChangeText={setVerificationCode}
-              onSubmitEditing={setVerificationCode}>
-              </Dialog.Input>
-            <Dialog.Button
-              label="Cancel"
-              onPress={() => {
-                setDialogVisible(false)
-                setVerificationCode("")
-              }}
-            ></Dialog.Button>
-            <Dialog.Button
-              label="OK"
-              onPress={verifyCode}
-            />
+          <Dialog.Description>
+            To complete this action, please enter the code we sent to your phone
+            number.
+          </Dialog.Description>
+          <Dialog.Input
+            placeholder="12312"
+            onChangeText={setVerificationCode}
+            onSubmitEditing={setVerificationCode}
+          ></Dialog.Input>
+          <Dialog.Button
+            label="Cancel"
+            onPress={() => {
+              setDialogVisible(false);
+              setVerificationCode("");
+            }}
+          ></Dialog.Button>
+          <Dialog.Button label="OK" onPress={verifyCode} />
         </Dialog.Container>
-        <View style={{alignItems: 'flex-end'}}>
-          <Button style={styles.account}
-                  onPress={() => checkUserAuthenticated()}>
-              <AppText>Account</AppText>
+
+        <View style={{ alignItems: "flex-end" }}>
+          <Button
+            style={styles.account}
+            onPress={() => checkUserAuthenticated()}
+          >
+            <AppText>My Account</AppText>
           </Button>
         </View>
 
-        <View style={[defaultStyles.centerItems, styles.titleContainer]}>
-          <Text style={[defaultStyles.title, styles.mainTitle]}>Split Check!</Text>
-        </View>
-        <View style={defaultStyles.centerItems}>
-        <Image
-          style={styles.logo}
-          source={require('../../assets/splitcheck-logo.png')}/>
+        <View
+          style={[
+            defaultStyles.centerItems,
+            {
+              height: "55%",
+            },
+          ]}
+        >
+          <Image
+            style={{
+              resizeMode: "contain",
+              height: "80%",
+            }}
+            source={require("../../assets/splitcheck-logo.png")}
+          />
         </View>
 
-        <Button style={{ backgroundColor: defaultStyles.colors.secondary }}
-                onPress={() => navigation.navigate("CreateEventNavigator")}>
-            <AppText>New Event</AppText>
+        <Button
+          style={{ backgroundColor: defaultStyles.colors.secondary }}
+          onPress={() => navigation.navigate("CreateEventNavigator")}
+        >
+          <AppText>New Event</AppText>
         </Button>
-        <Button style={{ backgroundColor: defaultStyles.colors.secondary }}
-                onPress={() => navigation.navigate("SettleNavigator")}>
-            <AppText>Join Event</AppText>
+        <Button
+          style={{ backgroundColor: defaultStyles.colors.secondary }}
+          onPress={() => navigation.navigate("SettleNavigator")}
+        >
+          <AppText>Join Event</AppText>
         </Button>
-        <Button style={{ backgroundColor: defaultStyles.colors.secondary }}
-                onPress={() => navigation.navigate("History")}>
-            <AppText>History</AppText>
+        <Button
+          style={{ backgroundColor: defaultStyles.colors.secondary }}
+          onPress={() => navigation.navigate("History")}
+        >
+          <AppText>History</AppText>
         </Button>
         {verifyError && (
           <AppText
@@ -154,51 +168,53 @@ export default function Home({navigation}) {
           >{`Error: ${verifyError.message}`}</AppText>
         )}
       </View>
-
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-      flex: 1,
-      backgroundColor: '#71EC4C',
-      alignItems: 'center',
-      justifyContent: 'center',
+    flex: 1,
+    backgroundColor: "#71EC4C",
+    alignItems: "center",
+    justifyContent: "center",
   },
   account: {
-    width: '30%',
+    width: "40%",
     height: 50,
-    alignSelf: 'flex-end'
+    alignSelf: "flex-end",
   },
   button: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: 'green',
+    backgroundColor: "green",
   },
   text: {
     fontSize: 16,
     lineHeight: 21,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     letterSpacing: 0.25,
-    color: 'white',
+    color: "white",
   },
   mainTitle: {
     marginTop: 50,
-    marginBottom: 200,
+    // marginBottom: 200,
   },
   logo: {
-    width: '30%',
-    height: '30%',
-    resizeMode: 'contain'
+    // width: "30%",
+    // height: "30%",
+    // resizeMode: "contain",
   },
   error: {
     marginTop: 10,
     fontWeight: "bold",
     color: "#ff5252",
+  },
+  inputContainer: {
+    padding: 10,
   },
 });
