@@ -117,12 +117,13 @@ export default function Home({ navigation }) {
           ></Dialog.Button>
           <Dialog.Button label="OK" onPress={verifyCode} />
         </Dialog.Container>
+
         <View style={{ alignItems: "flex-end" }}>
           <Button
             style={styles.account}
             onPress={() => checkUserAuthenticated()}
           >
-            <AppText>Account</AppText>
+            <AppText>My Account</AppText>
           </Button>
         </View>
 
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   account: {
-    width: "30%",
+    width: "40%",
     height: 50,
     alignSelf: "flex-end",
   },
@@ -212,5 +213,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontWeight: "bold",
     color: "#ff5252",
+  },
+  inputContainer: {
+    padding: 10,
   },
 });
