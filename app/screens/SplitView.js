@@ -6,54 +6,45 @@ import defaultStyles from "../config/styles";
 import AppText from "../components/AppText";
 import AppTextInput from "../components/AppTextInput";
 import { db } from "../../firebase";
-import { collection, onSnapshot, query, where, orderBy } from "firebase/firestore";
+import { collection, onSnapshot, query, where, orderBy, collectionGroup, getDocs, doc } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { app, auth } from "../../firebase";
 
 export default function SplitView({ route, navigation }) {
-  const { eventCode, eventName } = route.params;
+  const { eventCode, eventName, creatorID } = route.params;
   const [friends, setFriends] = useState([]);
   const [user, loading, error] = useAuthState(auth);
 
-  useEffect(() => {
+  useEffect(async () => {
     const queryEventByInviteCode = query(
       collection(db, "events"),
       where("inviteCode", "==", eventCode),
       orderBy("timestamp", "desc")
     );
-    onSnapshot(queryEventByInviteCode, (results) => {
-      setFriends(results.docs[0].data().friends)
+    const eventDocs = await getDocs(queryEventByInviteCode)
+    const eventID = eventDocs.docs[0].id
+    if (eventDocs.empty) {
+      console.log("Empty!")
+      setCodeInvalid(true)
+    } else {
+      const friendsQuery = query(collection(db, "events", eventID, "friends"), orderBy("timestamp", "asc"))
+      onSnapshot(friendsQuery, (results) => {
+        let update = []
+        results.forEach((doc) => {
+          console.log(doc.data())
+          update.push(doc.data())
+        })
+        setFriends(update)
     });
+    }
 
   }, []);
-
-  // const lenders = [
-  //   {
-  //     name: "ME",
-  //     loan: 20,
-  //   },
-  //   {
-  //     name: "Madison",
-  //     loan: 20,
-  //   },
-  //   {
-  //     name: "Sally",
-  //     loan: 20,
-  //   },
-  //   {
-  //     name: "Meghan",
-  //     loan: 20,
-  //   },
-  //   {
-  //     name: "Domininc",
-  //     loan: 20,
-  //   },
-  // ];
-
+  
   return (
     <Screen>
       <View style={[defaultStyles.centerItems, styles.titleContainer]}>
         <AppText style={defaultStyles.title}>{eventName}</AppText>
+        <AppText style={defaultStyles.title}>Join Code: <AppText style={styles.success}>{eventCode}</AppText></AppText>
       </View>
       <View style={styles.lenderContainer}>
         {friends.map((friend) => {
@@ -61,7 +52,7 @@ export default function SplitView({ route, navigation }) {
             <Button
               key={friend.userID}
               style={{
-                backgroundColor: defaultStyles.colors.light,
+                backgroundColor: user.uid === friend.userID ? "white" : defaultStyles.colors.light,
                 borderColor: defaultStyles.colors.medium,
                 borderWidth: 1,
               }}
@@ -72,17 +63,19 @@ export default function SplitView({ route, navigation }) {
               }}
               onPress={() =>
                 navigation.navigate("SettlePayment", {
+                  eventCode: eventCode,
                   eventName: eventName,
-                  displayName: friend.displayName,
-                  amountOwed: friend.amount.toString(),
+                  friendInfo: friend,
+                  creatorID: creatorID
                 })
               }
+              disabled={user.uid != friend.userID}
             >
-              <AppText style={{ textAlign: "center" }}>
-                {friend.displayName}
+              <AppText style={user.uid == friend.userID ? styles.myAmount : {}}>
+                {friend.isCreator ? "👑 " : ""}{friend.displayName}{friend.isCreator ? " 👑 " : ""}
               </AppText>
               <AppText style={{ textAlign: "center" }}>
-                ${friend.amount.toString()}
+                ${friend.amount} {friend.paid? "✅": "⌛"}
               </AppText>
             </Button>
           );
@@ -99,6 +92,10 @@ export default function SplitView({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
+  myAmount: {
+    fontWeight: "bold",
+    color: defaultStyles.colors.secondary
+  },
   titleContainer: {
     padding: 20,
     borderBottomColor: defaultStyles.colors.light,
@@ -112,5 +109,10 @@ const styles = StyleSheet.create({
   },
   loan: {
     fontSize: 16,
+  },
+  success: {
+    fontFamily: Platform.OS === "android" ? "Roboto" : "Avenir",
+    color: "#4ecdc4",
+    fontSize: 25,
   },
 });

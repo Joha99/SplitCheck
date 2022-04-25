@@ -4,7 +4,10 @@ import {
   onSnapshot,
   query,
   where,
-  Timestamp
+  Timestamp,
+  writeBatch,
+  doc,
+  setDoc
 } from "firebase/firestore";
 import React, { useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -60,6 +63,7 @@ export default function CreateEvent({ navigation }) {
   };
 
   const handleCreateEvent = async (generatedCode) => {
+    const batch = writeBatch(db);
     LogBox.ignoreLogs(["Setting a timer for a long period of time, i.e."]);
     console.log(generatedCode);
     let myAmount = totalAmount
@@ -74,16 +78,25 @@ export default function CreateEvent({ navigation }) {
       splitAmount: dividedAmount,
       splitEvenly: isEvenSplit,
       numPeople: numPeople,
-      friends: [
-        {
-          userID: user.uid,
-          displayName: user.displayName,
-          amount: myAmount,
-          isCreator: true          
-        },
-      ],
       timestamp: Timestamp.now()
     });
+
+    await setDoc(doc(db, "events", docRef.id, "friends", user.uid), {
+      userID: user.uid,
+      displayName: user.displayName,
+      amount: myAmount,
+      isCreator: true, 
+      paid: true,
+      timestamp: Timestamp.now()
+    })
+    // let friendsRef = doc("events", docRef).collection("friends")
+    // friendsRef.doc(user.uid).set({
+      
+    // }).then(()=> {
+
+    // }).catch((error) => {
+    //   console.log(error)
+    // })
     // console.log(`added ${docRef.id} to Firestore.`)
 
     // These are some code examples on how to access data from the firestore
@@ -113,7 +126,7 @@ export default function CreateEvent({ navigation }) {
 
     navigation.navigate("SettleNavigator", {
       screen: "SplitView",
-      params: { eventName: eventName, eventCode: generatedCode },
+      params: { eventName: eventName, eventCode: generatedCode, creatorID: user.uid},
     });
   };
 

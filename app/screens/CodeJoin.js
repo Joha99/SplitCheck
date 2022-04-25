@@ -6,7 +6,6 @@ import AppText from "../components/AppText";
 import AppTextInput from "../components/AppTextInput";
 import Button from "../components/Button";
 import { LogBox } from "react-native";
-
 import {
   collection,
   onSnapshot,
@@ -15,7 +14,12 @@ import {
   orderBy,
   limit,
   updateDoc,
-  arrayUnion
+  arrayUnion,
+  getDocs,
+  setDoc,
+  doc,
+  getDoc,
+  Timestamp
 } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -35,40 +39,61 @@ export default function CodeJoin({navigation}) {
         where("inviteCode", "==", code),
         orderBy("timestamp", "desc")
       );
-      onSnapshot(queryEventByInviteCode, (results) => {
-        if (results.empty) {
-          
+
+      const eventDocs = await getDocs(queryEventByInviteCode)
+      const event = eventDocs.docs[0].data()
+      // onSnapshot(queryEventByInviteCode, (results) => {
+        if (eventDocs.empty) {
           console.log("Empty!")
           setCodeInvalid(true)
-        
         } else {
-          let event = results.docs[0].data()
-          let friends = event.friends
-          if (friends.some(f => f.userID === user.uid)) {
-            console.log("HEEEY WAIT A MINUTE, YOU ALREADY JOINED BEFORE!")
-          } else {
-            let isEvenSplit = event.splitEvenly
-            let amt = 0
-
-            if (isEvenSplit) {
-              amt = event.splitAmount
-            }
-            friends.push({
+          let amt = 0
+          if (event.splitEvenly) {
+            amt = event.splitAmount
+          }
+          let eventDoc = eventDocs.docs[0]
+          console.log(eventDoc.id)
+          let myEntry = await getDoc(doc(db, "events", eventDoc.id, "friends", user.uid))
+          if(!myEntry.exists()) {
+            await setDoc(doc(db, "events", eventDoc.id, "friends", user.uid), {
               userID: user.uid,
               displayName: user.displayName,
               amount: amt,
-              isCreator: false
-            })
-             updateDoc(results.docs[0].ref, {
-                friends: friends
-            })
+              isCreator: false, 
+              paid: false,
+              timestamp: Timestamp.now()
+            }).catch((error) => console.log(error))
           }
-          navigation.navigate("SplitView", {
+           navigation.navigate("SplitView", {
             eventCode: code,
             eventName: event.name,
+            creatorID: event.creator
           })
         }
-      });
+    //       
+    //       console.log(friends)
+    //       if (friends.some(f => f.userID === user.uid)) {
+    //         console.log("HEEEY WAIT A MINUTE, YOU ALREADY JOINED BEFORE!")
+    //       } else {
+    //         let isEvenSplit = event.splitEvenly
+    //         let amt = 0
+
+    //         if (isEvenSplit) {
+    //           amt = event.splitAmount
+    //         }
+    //         friends.push({
+    //           userID: user.uid,
+    //           displayName: user.displayName,
+    //           amount: amt,
+    //           isCreator: false,
+    //           paid: false
+    //         })
+    //          updateDoc(results.docs[0].ref, {
+    //             friends: friends
+    //         })
+    //       }
+    //     }
+    //   });
     } else {
       setCodeInvalid(true)
     }
@@ -86,8 +111,9 @@ export default function CodeJoin({navigation}) {
           <AppText>Session code</AppText>
           <AppTextInput placeholder="1B3D5F" 
           autoFocus={true}
+          value={joinCode}
           onChangeText={setJoinCode}
-          onSubmitEditing={setJoinCode}/>
+          onSubmitEditing={checkEvent}/>
         </View>
         
         {codeInvalid && (
