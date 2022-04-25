@@ -136,10 +136,11 @@ const styles = StyleSheet.create({
     padding: 20,
     borderBottomColor: defaultStyles.colors.light,
     borderBottomWidth: 1,
+    maxHeight: "15%"
   },
   lenderContainer: {
     padding: 20,
-    height: "75%",
+    height: "89%",
   },
   name: {
     fontSize: 16,

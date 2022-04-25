@@ -4,7 +4,7 @@ export default {
   "expo": {
     "name": "SplitCheck",
     "slug": "SplitCheck",
-    "version": "2.0.1",
+    "version": "2.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {

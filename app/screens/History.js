@@ -130,10 +130,11 @@ const styles = StyleSheet.create({
     padding: 20,
     borderBottomColor: defaultStyles.colors.light,
     borderBottomWidth: 1,
+    maxHeight: "15%"
   },
   eventsContainer: {
     padding: 20,
-    height: "84%",
+    height: "92%",
   },
   name: {
     fontSize: 16,
