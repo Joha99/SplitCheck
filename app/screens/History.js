@@ -69,7 +69,7 @@ export default function History({navigation}) {
               }}
             >
               <AppText>{event.name}</AppText>
-              <AppText>${event.amount}</AppText>
+              <AppText>Date: {event.timestamp.toDate().toLocaleDateString("en-US")}</AppText>
             </Button>
           );
         })}
