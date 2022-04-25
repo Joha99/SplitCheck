@@ -75,7 +75,7 @@ export default function History({navigation}) {
               }}
             >
               <AppText style={styles.event}>{event.name}</AppText>
-              <AppText>Date: {event.timestamp.toDate().toLocaleDateString("en-US")}</AppText>
+              <AppText>{event.timestamp.toDate().toLocaleDateString("en-US")}</AppText>
             </Button>
           );
         })}
