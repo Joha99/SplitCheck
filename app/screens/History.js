@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
+import { StyleSheet, Text, View, TouchableWithoutFeedback, ScrollView } from "react-native";
 import React, {useEffect, useState} from "react";
 import Screen from "../components/Screen";
 import Button from "../components/Button";
@@ -48,6 +48,7 @@ export default function History({navigation}) {
         <AppText style={defaultStyles.title}>Split History</AppText>
       </View>
       <View style={styles.eventsContainer}>
+        <ScrollView showsVerticalScrollIndicator={false}>
         {events.map((event) => {
           return (
             <Button
@@ -73,8 +74,9 @@ export default function History({navigation}) {
             </Button>
           );
         })}
+        </ScrollView>
       </View>
-      <View style={styles.eventsContainer}>
+      <View>
       <Button style={{ backgroundColor: defaultStyles.colors.secondary }}
                 onPress={() => navigation.navigate("Home")}>
           <AppText>Back</AppText>
@@ -92,6 +94,7 @@ const styles = StyleSheet.create({
   },
   eventsContainer: {
     padding: 20,
+    height: '84%'
   },
   name: {
     fontSize: 16,
