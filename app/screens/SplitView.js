@@ -109,10 +109,11 @@ export default function SplitView({ route, navigation }) {
           })}
         </ScrollView>
         <Image style={styles.ad} source={require("../../assets/ad.png")} />
-      </View>
-      <View>
         <Button
-          style={{ backgroundColor: defaultStyles.colors.secondary }}
+          style={{
+            backgroundColor: defaultStyles.colors.secondary,
+            marginTop: 10,
+          }}
           onPress={() => navigation.navigate("Home")}
         >
           <AppText>Home</AppText>
@@ -138,7 +139,7 @@ const styles = StyleSheet.create({
   },
   lenderContainer: {
     padding: 20,
-    height: "79%",
+    height: "75%",
   },
   name: {
     fontSize: 16,
