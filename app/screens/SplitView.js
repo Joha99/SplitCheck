@@ -31,7 +31,6 @@ export default function SplitView({ route, navigation }) {
       onSnapshot(friendsQuery, (results) => {
         let update = []
         results.forEach((doc) => {
-          console.log(doc.data())
           update.push(doc.data())
         })
         setFriends(update)

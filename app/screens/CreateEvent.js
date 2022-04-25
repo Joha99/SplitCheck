@@ -89,15 +89,6 @@ export default function CreateEvent({ navigation }) {
       paid: true,
       timestamp: Timestamp.now()
     })
-    // let friendsRef = doc("events", docRef).collection("friends")
-    // friendsRef.doc(user.uid).set({
-      
-    // }).then(()=> {
-
-    // }).catch((error) => {
-    //   console.log(error)
-    // })
-    // console.log(`added ${docRef.id} to Firestore.`)
 
     // These are some code examples on how to access data from the firestore
     const queryEventsByInviteCode = query(

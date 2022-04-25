@@ -70,35 +70,9 @@ export default function CodeJoin({navigation}) {
             creatorID: event.creator
           })
         }
-    //       
-    //       console.log(friends)
-    //       if (friends.some(f => f.userID === user.uid)) {
-    //         console.log("HEEEY WAIT A MINUTE, YOU ALREADY JOINED BEFORE!")
-    //       } else {
-    //         let isEvenSplit = event.splitEvenly
-    //         let amt = 0
-
-    //         if (isEvenSplit) {
-    //           amt = event.splitAmount
-    //         }
-    //         friends.push({
-    //           userID: user.uid,
-    //           displayName: user.displayName,
-    //           amount: amt,
-    //           isCreator: false,
-    //           paid: false
-    //         })
-    //          updateDoc(results.docs[0].ref, {
-    //             friends: friends
-    //         })
-    //       }
-    //     }
-    //   });
     } else {
       setCodeInvalid(true)
-    }
-    
-    
+    }    
   }
 
   return (
