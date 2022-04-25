@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
+import { StyleSheet, Text, View, TouchableWithoutFeedback, ScrollView } from "react-native";
 import React, { useState, useEffect } from "react";
 import Screen from "../components/Screen";
 import Button from "../components/Button";
@@ -46,6 +46,7 @@ export default function SplitView({ route, navigation }) {
         <AppText style={defaultStyles.title}>Join Code: <AppText style={styles.success}>{eventCode}</AppText></AppText>
       </View>
       <View style={styles.lenderContainer}>
+        <ScrollView showsVerticalScrollIndicator={false}>
         {friends.map((friend) => {
           return (
             <Button
@@ -79,6 +80,9 @@ export default function SplitView({ route, navigation }) {
             </Button>
           );
         })}
+        </ScrollView>
+      </View>
+      <View>
         <Button
           style={{ backgroundColor: defaultStyles.colors.secondary }}
           onPress={() => navigation.navigate("Home")}
@@ -102,6 +106,7 @@ const styles = StyleSheet.create({
   },
   lenderContainer: {
     padding: 20,
+    height: '79%'
   },
   name: {
     fontSize: 16,
