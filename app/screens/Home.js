@@ -123,7 +123,7 @@ export default function Home({navigation}) {
         <View style={{alignItems: 'flex-end'}}>
           <Button style={styles.account}
                   onPress={() => checkUserAuthenticated()}>
-              <AppText>Account</AppText>
+              <AppText>My Account</AppText>
           </Button>
         </View>
 
