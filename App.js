@@ -5,10 +5,12 @@ import CreateEventNavigator from "./app/navigation/CreateEventNavigator";
 import navigationTheme from "./app/navigation/navigationTheme";
 import SettleNavigator from "./app/navigation/SettleNavigator";
 import AppNavigator from "./app/navigation/AppNavigator";
+import { LogBox } from "react-native";
 
 const Stack = createStackNavigator();
 
 export default function App() {
+  LogBox.ignoreLogs([""]);
   return (
     <NavigationContainer theme={navigationTheme}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>

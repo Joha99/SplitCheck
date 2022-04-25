@@ -51,7 +51,7 @@ export default function SettlePayment({ route, navigation }) {
         doc(db, "events", eventID, "friends", user.uid),
         {
           amount: amount,
-          timestamp: Timestamp.now(),
+          // timestamp: Timestamp.now(),
         },
         { merge: true }
       );

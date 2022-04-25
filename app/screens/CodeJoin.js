@@ -41,17 +41,18 @@ export default function CodeJoin({navigation}) {
       );
 
       const eventDocs = await getDocs(queryEventByInviteCode)
-      const event = eventDocs.docs[0].data()
       // onSnapshot(queryEventByInviteCode, (results) => {
         if (eventDocs.empty) {
           console.log("Empty!")
           setCodeInvalid(true)
         } else {
+          let eventDoc = eventDocs.docs[0]
+          const event = eventDoc.data()
           let amt = 0
           if (event.splitEvenly) {
             amt = event.splitAmount
           }
-          let eventDoc = eventDocs.docs[0]
+          
           console.log(eventDoc.id)
           let myEntry = await getDoc(doc(db, "events", eventDoc.id, "friends", user.uid))
           if(!myEntry.exists()) {
